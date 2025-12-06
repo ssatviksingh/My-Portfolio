@@ -1,10 +1,10 @@
 ```
-🚀 Satvik Singh — Mobile App Developer Portfolio
+## 🚀 Satvik Singh — Mobile App Developer Portfolio
 
 Welcome to the source code of my personal developer portfolio.
 This website showcases my React Native projects, skills, experience, and blogs.
 
-🛠 Tech Stack
+## 🛠 Tech Stack
 
 Vite + React + TypeScript
 
@@ -20,7 +20,7 @@ Custom reusable components
 
 Dark Mode themes
 
-📱 Featured Projects
+##📱 Featured Projects
 📅 Google Calendar Clone (Mobile)
 
 A complete Google Calendar app with:
@@ -32,6 +32,7 @@ Events, reminders
 Smooth animations
 
 Built using React Native + Expo + TypeScript
+
 
 🎬 Netflix Clone (Mobile)
 
@@ -47,6 +48,7 @@ TMDB API integration
 
 Complete mobile-first UI
 
+
 🎉 Virtual Event Platform
 
 A mobile app with:
@@ -61,7 +63,7 @@ Push notifications
 
 Node.js backend support
 
-📄 Blog System Included
+## 📄 Blog System Included
 
 The portfolio includes a full blog with:
 
@@ -73,7 +75,7 @@ Smooth transitions
 
 Progress bar while reading
 
-🧰 Folder Structure
+## 🧰 Folder Structure
 src/
  ├── components/
  ├── pages/
@@ -87,7 +89,7 @@ src/
 
 Coming soon…
 
-📬 Contact
+## 📬 Contact
 
 If you'd like to collaborate or have a project idea:
 
