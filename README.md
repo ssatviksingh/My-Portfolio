@@ -65,6 +65,8 @@ cd My-Portfolio
 npm install
 npm run dev
 
+```
+
 ## 📬 Contact
 
 If you'd like to collaborate or have a project idea:
@@ -74,7 +76,7 @@ Email: satviksingh164@gmail.com
 LinkedIn: https://www.linkedin.com/in/satvik-singh-785337287/
 
 GitHub: https://github.com/ssatviksingh
-```
+
 
 ---
 
