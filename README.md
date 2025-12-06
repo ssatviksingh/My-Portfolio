@@ -1,5 +1,4 @@
 ```
-<div align="center">
 
 # 🚀 **Satvik Singh — Mobile App Developer**
 ### **React Native | TypeScript | Expo | Animations | UI/UX**
@@ -8,7 +7,6 @@
 
 ---
 
-</div>
 
 ## ✨ **Projects Included in This Portfolio**
 
@@ -45,7 +43,6 @@ A mobile app for events, RSVPs, favorites, notifications & real-time updates.
 
 ## 🧰 **Tech Stack**
 
-<div align="center">
 
 | Category | Technologies |
 |---------|--------------|
@@ -54,7 +51,6 @@ A mobile app for events, RSVPs, favorites, notifications & real-time updates.
 | **UI/UX** | Animations, Tailwind CSS (NativeWind) |
 | **Tools** | Git, GitHub, GSAP, REST APIs |
 
-</div>
 
 ---
 
