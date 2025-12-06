@@ -8,6 +8,14 @@
 ---
 
 
+---
+
+## 🚀 **Live Portfolio**
+🔗 **https://ssatviksingh.github.io/My-Portfolio/**
+
+---
+
+
 ## ✨ **Projects Included in This Portfolio**
 
 ### 📅 **Google Calendar Clone (Mobile)**
@@ -73,6 +81,17 @@ LinkedIn: https://www.linkedin.com/in/satvik-singh-785337287/
 GitHub: https://github.com/ssatviksingh
 ```
 
+---
+
+🚀 Deploying to GitHub Pages
+
+This project uses HashRouter and the gh-pages package.
+
+To deploy:
+npm run build
+npm run deploy
+
+---
 
 # React + TypeScript + Vite
 
