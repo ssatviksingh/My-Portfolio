@@ -1,5 +1,3 @@
-```
-
 # 🚀 **Satvik Singh — Mobile App Developer**
 ### **React Native | TypeScript | Expo | Animations | UI/UX**
 
