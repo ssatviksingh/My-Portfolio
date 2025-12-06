@@ -1,93 +1,70 @@
 ```
-## 🚀 Satvik Singh — Mobile App Developer Portfolio
+<div align="center">
 
-Welcome to the source code of my personal developer portfolio.
-This website showcases my React Native projects, skills, experience, and blogs.
+# 🚀 **Satvik Singh — Mobile App Developer**
+### **React Native | TypeScript | Expo | Animations | UI/UX**
 
-## 🛠 Tech Stack
+📱 Building smooth, modern and production-ready mobile apps  
 
-Vite + React + TypeScript
+---
 
-Tailwind CSS
+</div>
 
-Framer Motion
+## ✨ **Projects Included in This Portfolio**
 
-GSAP Animations
+### 📅 **Google Calendar Clone (Mobile)**
+A complete calendar app built with React Native & Expo featuring:
+- Monthly / Weekly / Daily views  
+- Animations + smooth transitions  
+- Reminder system  
+- Event creation  
+- Polished UI  
 
-React Router
+**Tech:** React Native, TypeScript, Expo, MongoDB, Node.js  
 
-Custom reusable components
+---
 
-Dark Mode themes
+### 🎬 **Netflix Clone (Mobile)**
+A fully functional Netflix-style mobile app:
+- Authentication  
+- Category browsing  
+- Video streaming layout  
+- Custom carousels  
+- Advanced UI animations  
 
-##📱 Featured Projects
-📅 Google Calendar Clone (Mobile)
+**Tech:** React Native, TypeScript, TMDB API, Expo  
 
-A complete Google Calendar app with:
+---
 
-Monthly / Weekly / Daily views
+### 🎉 **Virtual Event Platform (Mobile App)**
+A mobile app for events, RSVPs, favorites, notifications & real-time updates.
 
-Events, reminders
+**Tech:** React Native, Node.js, MongoDB, Expo  
 
-Smooth animations
+---
 
-Built using React Native + Expo + TypeScript
+## 🧰 **Tech Stack**
 
+<div align="center">
 
-🎬 Netflix Clone (Mobile)
+| Category | Technologies |
+|---------|--------------|
+| **Mobile** | React Native, Expo, TypeScript |
+| **Backend** | Node.js, Express, MongoDB |
+| **UI/UX** | Animations, Tailwind CSS (NativeWind) |
+| **Tools** | Git, GitHub, GSAP, REST APIs |
 
-A modern Netflix-style mobile app featuring:
+</div>
 
-Authentication
+---
 
-Movie categories
+## 🚀 **How to Run the Portfolio Locally**
 
-Custom carousel & animations
-
-TMDB API integration
-
-Complete mobile-first UI
-
-
-🎉 Virtual Event Platform
-
-A mobile app with:
-
-Event discovery
-
-RSVPs + Favorites
-
-Real-time updates
-
-Push notifications
-
-Node.js backend support
-
-## 📄 Blog System Included
-
-The portfolio includes a full blog with:
-
-Markdown support
-
-Read-time estimator
-
-Smooth transitions
-
-Progress bar while reading
-
-## 🧰 Folder Structure
-src/
- ├── components/
- ├── pages/
- ├── data/
- ├── styles/
- ├── hooks/
- ├── assets/
- └── App.tsx
-
-🌐 Live Website
-
-Coming soon…
+```sh
+git clone https://github.com/ssatviksingh/My-Portfolio
+cd My-Portfolio
+npm install
+npm run dev
 
 ## 📬 Contact
 
@@ -174,3 +151,8 @@ export default defineConfig([
   },
 ])
 ```
+
+
+<div align="center">
+⭐ If you like this portfolio, give the repo a star!
+</div> ```
