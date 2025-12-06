@@ -11,7 +11,7 @@
 ---
 
 ## 🚀 **Live Portfolio**
-🔗 **https://ssatviksingh.github.io/My-Portfolio/**
+🔗 [https://ssatviksingh.github.io/My-Portfolio/](https://ssatviksingh.github.io/My-Portfolio/)
 
 ---
 
@@ -76,9 +76,9 @@ If you'd like to collaborate or have a project idea:
 
 Email: satviksingh164@gmail.com
 
-LinkedIn: https://www.linkedin.com/in/satvik-singh-785337287/
+LinkedIn: [https://www.linkedin.com/in/satvik-singh-785337287/](https://www.linkedin.com/in/satvik-singh-785337287/)
 
-GitHub: https://github.com/ssatviksingh
+GitHub: [https://github.com/ssatviksingh](https://github.com/ssatviksingh)
 ```
 
 ---
