@@ -44,6 +44,26 @@ A mobile app for events, RSVPs, favorites, notifications & real-time updates.
 
 ---
 
+### 🚨 Disaster Alert & SOS App (Mobile)
+
+A safety-focused emergency response mobile application featuring:
+
+Real-time disaster alerts
+
+Offline-first SOS system
+
+Live location sharing
+
+File attachments (images / documents)
+
+Retry queue for poor network conditions
+
+Accessibility-friendly UI for emergency scenarios
+
+Tech: React Native, TypeScript, Expo, Zustand, AsyncStorage, React Navigation, Node.js, Express, MongoDB, JWT Authentication
+
+---
+
 ## 🧰 **Tech Stack**
 
 
