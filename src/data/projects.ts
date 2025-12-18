@@ -4,6 +4,7 @@
 import googleCalendarImg from '../assets/GoogleCalendar.png';
 import netflixCloneImg from '../assets/NetflixClone.png';
 import virtualEventImg from '../assets/VirtualEvent.png';
+import disasterAlertImg from '../assets/DisasterSOS.png'
 
 export interface Project {
     id: string;
@@ -80,4 +81,31 @@ export const projects: Project[] = [
         image: virtualEventImg,
         repo: 'https://github.com/ssatviksingh/virtual-event-platform',
     },
+
+    // 3️⃣ Disaster Alert & SOS App
+{
+    id: 'disaster-alert-sos',
+    slug: 'disaster-alert-sos-mobile',
+    title: 'Disaster Alert & SOS App',
+    year: '2025',
+    platform: 'Android · React Native',
+    role: 'Full-stack mobile app (frontend + backend)',
+    description:
+        'A safety-focused mobile application that provides real-time disaster alerts and an offline-first SOS system with live location sharing, file attachments, retry queueing, and accessibility features designed for emergency scenarios.',
+    tools: [
+        'React Native',
+        'TypeScript',
+        'Expo',
+        'Zustand',
+        'AsyncStorage',
+        'React Navigation',
+        'Node.js',
+        'Express',
+        'MongoDB',
+        'JWT Authentication',
+    ],
+    image: disasterAlertImg,
+    repo: 'https://github.com/ssatviksingh/disaster-alert-sos',
+},
+
 ];
