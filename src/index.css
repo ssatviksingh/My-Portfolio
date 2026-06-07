@@ -8,12 +8,12 @@
 }
 
 body {
-  @apply bg-bg-light text-text-main font-body;
+  @apply bg-bg-light text-text-light-main font-body transition-colors duration-300;
 }
 
 /* Dark mode body */
 .dark body {
-  @apply bg-bg-dark text-text-main;
+  @apply bg-bg-dark text-text-dark-main;
 }
 
 /* Custom scrollbar (optional) */
@@ -22,13 +22,13 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgba(148, 163, 184, 0.8);
+  background-color: #074782;
   border-radius: 9999px;
 }
 
 /* Utility for gradient borders or cards, if you want */
 .gradient-border {
-  background: linear-gradient(135deg, #0ea5e9, #22c55e, #f97316);
+  background: linear-gradient(135deg, #074782, #0d5ca3, #f4b41a);
   padding: 1px;
   border-radius: 1.5rem;
 }

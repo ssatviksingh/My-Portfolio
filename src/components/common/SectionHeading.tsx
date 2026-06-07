@@ -21,7 +21,7 @@ const SectionHeading: React.FC<SectionHeadingProps> = ({
           {eyebrow}
         </span>
       )}
-      <h2 className="font-display text-3xl sm:text-4xl font-semibold tracking-tight text-white">
+      <h2 className="font-display text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-semibold tracking-tight text-white">
         {title}
       </h2>
       {subtitle && (

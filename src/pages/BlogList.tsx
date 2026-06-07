@@ -21,7 +21,9 @@ const BlogList: React.FC = () => {
           {blogPosts.map(post => (
             <article
               key={post.id}
-              className="group flex flex-col overflow-hidden rounded-3xl border border-slate-800 bg-deep-blue-soft/80 shadow-soft-glow transition hover:-translate-y-2 hover:border-accent-gold/70"
+              className="group relative flex flex-col overflow-hidden rounded-3xl border border-slate-800 bg-deep-blue-soft/80 shadow-soft-glow transition-transform duration-300 hover:-translate-y-2 hover:border-accent-gold/70 hover:shadow-[0_24px_60px_rgba(0,0,0,0.7)]"
+              data-cursor="card"
+              data-cursor-label="READ"
             >
               {post.image && (
                 <div
@@ -29,6 +31,8 @@ const BlogList: React.FC = () => {
                   style={{ backgroundImage: `url(${post.image})` }}
                 />
               )}
+
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
               <div className="flex flex-1 flex-col p-5">
                 <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-text-muted">
@@ -56,6 +60,8 @@ const BlogList: React.FC = () => {
                   <Link
                     to={`/blog/${post.slug}`}
                     className="text-sm font-medium text-accent-gold hover:text-accent-orange"
+                    data-cursor="button"
+                    data-cursor-label="READ"
                   >
                     Read article →
                   </Link>

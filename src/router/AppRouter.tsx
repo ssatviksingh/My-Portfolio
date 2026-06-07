@@ -9,16 +9,16 @@ import BlogPost from '../pages/BlogPost';
 import Contact from '../pages/Contact';
 import NotFound from '../pages/NotFound';
 import Privacy from '../pages/Privacy';
-import MouseParallaxWrapper from '../components/common/MouseParallaxWrapper';
 import ThankYou from '../pages/ThankYou';
+import ProjectDetail from '../pages/ProjectDetail';
 
 export const AppRouter: React.FC = () => {
   return (
-    <MouseParallaxWrapper intensity={28}>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/portfolio" element={<Portfolio />} />
+      <Route path="/portfolio/:slug" element={<ProjectDetail />} />
       <Route path="/skills" element={<Skills />} />
       <Route path="/blog" element={<BlogList />} />
       <Route path="/blog/:slug" element={<BlogPost />} />
@@ -27,6 +27,5 @@ export const AppRouter: React.FC = () => {
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/thank-you" element={<ThankYou />} />
     </Routes>
-    </MouseParallaxWrapper>
   );
 };

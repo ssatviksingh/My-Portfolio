@@ -5,6 +5,10 @@ import SectionHeading from '../components/common/SectionHeading';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link } from 'react-router-dom';
+import { projects } from '../data/projects';
+import { blogPosts } from '../data/blogPosts';
+import { MagneticButton } from '../components/common/MagneticButton';
+import wayGoodScreen from '../assets/WayGoodHelpStudyAbroad1.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,6 +17,33 @@ const Home: React.FC = () => {
   const heroRef = useRef<HTMLDivElement | null>(null);
   const floatingRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
+
+  const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const rotateX = ((y - rect.height / 2) / rect.height) * -8;
+    const rotateY = ((x - rect.width / 2) / rect.width) * 8;
+
+    gsap.to(card, {
+      rotateX,
+      rotateY,
+      transformPerspective: 800,
+      transformOrigin: 'center',
+      duration: 0.4,
+      ease: 'power2.out',
+    });
+  };
+
+  const resetTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    gsap.to(e.currentTarget, {
+      rotateX: 0,
+      rotateY: 0,
+      duration: 0.5,
+      ease: 'power3.out',
+    });
+  };
 
   // HERO animations (stagger + floating)
   useEffect(() => {
@@ -24,20 +55,20 @@ const Home: React.FC = () => {
       // Stagger hero headline + text
       gsap.fromTo(
         heroEl.querySelectorAll('.hero-line'),
-        { y: 40, opacity: 0 },
+        { y: 30, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 1.1,
+          duration: 0.9,
           ease: 'power3.out',
-          stagger: 0.12,
+          stagger: 0.1,
         },
       );
 
       // Gentle floating motion for the stack card
       gsap.to(floatingEl, {
-        y: -10,
-        duration: 2.5,
+        y: -8,
+        duration: 3,
         yoyo: true,
         repeat: -1,
         ease: 'sine.inOut',
@@ -58,9 +89,9 @@ const Home: React.FC = () => {
 
       gsap.from(targets, {
         opacity: 0,
-        y: 40,
-        stagger: 0.15,
-        duration: 0.7,
+        y: 30,
+        stagger: 0.1,
+        duration: 0.6,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: aboutEl,
@@ -72,128 +103,128 @@ const Home: React.FC = () => {
     return () => ctx.revert();
   }, []);
 
-  // Shared parallax for hero + about container
+  // Shared parallax for hero
   useEffect(() => {
     const el = motionRef.current;
     if (!el) return;
 
     const handleMove = (e: MouseEvent) => {
-      const x = (e.clientX - window.innerWidth / 2) / 40;
-      const y = (e.clientY - window.innerHeight / 2) / 40;
+      const x = (e.clientX - window.innerWidth / 2) / 50;
+      const y = (e.clientY - window.innerHeight / 2) / 50;
 
       gsap.to(el, {
         x,
         y,
-        duration: 0.6,
+        duration: 0.8,
         ease: 'power2.out',
       });
     };
 
     window.addEventListener('mousemove', handleMove);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMove);
-    };
+    return () => window.removeEventListener('mousemove', handleMove);
   }, []);
 
-  return (
-    <main className="relative overflow-hidden bg-bg-dark">
-      {/* shared background glow blobs for BOTH hero + about */}
-      <div className="pointer-events-none absolute -left-40 top-10 h-72 w-72 rounded-full bg-accent-orange/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-80 w-80 rounded-full bg-muted-green/20 blur-3xl" />
+  const handleScrollToProjects = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const projectsSec = document.getElementById('projects');
+    if (projectsSec) {
+      const offset = 72;
+      const top = window.scrollY + projectsSec.getBoundingClientRect().top - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
 
-      {/* everything that moves slightly with cursor */}
+  return (
+    <main className="relative overflow-hidden bg-bg-light dark:bg-bg-dark text-text-light-main dark:text-text-dark-main transition-colors duration-300">
+      {/* Background glow blobs */}
+      <div className="pointer-events-none absolute -left-40 top-10 h-80 w-80 rounded-full bg-brand-blue/10 dark:bg-brand-blue/20 blur-3xl" />
+      <div className="pointer-events-none absolute -right-40 bottom-10 h-96 w-96 rounded-full bg-brand-blue-light/10 dark:bg-brand-blue-light/15 blur-3xl" />
+      
+      {/* Grid Pattern Overlay */}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,#07478205_1px,transparent_1px),linear-gradient(to_bottom,#07478205_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#0747820b_1px,transparent_1px),linear-gradient(to_bottom,#0747820b_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+
+      {/* Cursor movement wrapper */}
       <div ref={motionRef} className="relative z-10">
         {/* HERO SECTION */}
-        <section className="relative flex min-h-[80vh] items-center px-6 pt-24 sm:px-10 lg:px-20">
+        <section id="hero" className="relative flex min-h-[85vh] items-center px-6 pt-12 pb-16 sm:px-10 lg:px-20">
           <div
             ref={heroRef}
-            className="mx-auto flex w-full max-w-6xl flex-col gap-10 lg:flex-row lg:items-center"
+            className="mx-auto flex w-full max-w-6xl flex-col gap-12 lg:flex-row lg:items-center"
           >
             {/* LEFT SIDE – TEXT */}
-            <div className="flex-1 space-y-6">
-              <p className="hero-line inline-flex rounded-full border border-accent-gold/40 bg-deep-blue-soft/60 px-3 py-1 text-xs uppercase tracking-[0.2em] text-accent-gold">
-                Portfolio · Mobile · Developer
+            <div className="flex-[1.2] space-y-6">
+              <p className="hero-line inline-flex rounded-full border border-brand-blue/30 dark:border-brand-blue/40 bg-brand-blue/5 dark:bg-brand-blue/10 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-brand-blue dark:text-brand-blue-light">
+                React Native & Mobile Developer
               </p>
 
-              <h1 className="hero-line font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-white">
-                Crafting immersive mobile{' '}
-                <span className="bg-gradient-to-r from-accent-orange via-accent-gold to-muted-green bg-clip-text text-transparent">
-                  experiences
-                </span>
-                .
+              <h1 className="hero-line font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                React Native Developer —{' '}
+                <span className="bg-gradient-to-r from-brand-blue to-brand-blue-light bg-clip-text text-transparent dark:from-brand-blue-light dark:to-accent-gold">
+                  Figma to production-ready
+                </span>{' '}
+                mobile apps.
               </h1>
 
-              <p className="hero-line max-w-xl text-sm sm:text-base text-text-muted">
-                I design and build performant mobile apps for <b>Android</b> and <b>iOS</b>{' '}
-                using React Native, TypeScript, and modern tooling — with a focus on smooth
-                animations, clean architecture, and a polished user experience.
+              <p className="hero-line max-w-xl text-sm sm:text-base text-text-light-muted dark:text-text-dark-muted leading-relaxed">
+                I build pixel-accurate, high-performance mobile user interfaces for EdTech and SaaS startups. Specializing in Figma-to-code implementations, custom component systems, and live API integrations.
               </p>
 
               <div className="hero-line flex flex-wrap gap-4">
-                <Link
-                  to="/portfolio"
-                  className="rounded-2xl bg-gradient-to-r from-accent-orange via-accent-gold to-muted-green px-6 py-3 text-sm font-medium text-bg-dark shadow-soft-glow transition hover:brightness-110 hover:-translate-y-0.5"
+                <MagneticButton
+                  asChild
+                  className="rounded-2xl bg-brand-blue hover:bg-brand-blue-light dark:bg-brand-blue-light dark:hover:bg-brand-blue text-white px-7 py-3.5 text-sm font-semibold shadow-md transition-colors"
+                  data-cursor-label="WORK"
                 >
-                  View my apps
-                </Link>
-                <Link
-                  to="/contact"
-                  className="rounded-2xl border border-slate-600 bg-deep-blue-soft/70 px-6 py-3 text-sm font-medium text-text-main transition hover:border-accent-orange hover:text-accent-orange hover:-translate-y-0.5"
+                  <a href="#projects" onClick={handleScrollToProjects}>View My Work</a>
+                </MagneticButton>
+                <MagneticButton
+                  asChild
+                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 px-7 py-3.5 text-sm font-semibold text-text-light-main dark:text-text-dark-main hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  data-cursor-label="UPWORK"
                 >
-                  Let&apos;s build your idea
-                </Link>
+                  <a href="https://www.upwork.com/freelancers/~0152c1a5b9ab135976?mp_source=share" target="_blank" rel="noreferrer">Hire Me on Upwork</a>
+                </MagneticButton>
               </div>
 
-              <div className="hero-line flex flex-wrap items-center gap-3 text-[11px] text-text-muted">
-                <span className="inline-flex items-center gap-1 rounded-full bg-black/40 px-3 py-1">
-                  <span className="h-1.5 w-1.5 rounded-full bg-green-400" />
-                  Available for freelance & roles
+              <div className="hero-line flex flex-wrap items-center gap-3 text-xs text-text-light-muted dark:text-text-dark-muted font-medium">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-900 px-3.5 py-1 border border-slate-200/50 dark:border-slate-800/50">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Available for freelance projects
                 </span>
-                <span>• React Native · Expo · TypeScript · Node.js</span>
+                <span>• React Native CLI · Flutter · TypeScript</span>
               </div>
             </div>
 
-            {/* RIGHT SIDE – FLOATING STACK CARD */}
+            {/* RIGHT SIDE – APP PREVIEW CARD */}
             <div
               ref={floatingRef}
-              className="mt-8 flex-1 lg:mt-0 flex justify-center"
+              className="flex-1 flex justify-center will-change-transform lg:justify-end"
+              onMouseMove={handleTilt}
+              onMouseLeave={resetTilt}
             >
-              <div className="gradient-border max-w-sm rounded-3xl">
-                <div className="relative rounded-3xl bg-gradient-to-br from-deep-blue to-bg-dark p-6 shadow-soft-glow">
-                  <div className="mb-4 flex items-center justify-between text-xs text-text-muted">
-                    <span>Currently building</span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-black/40 px-2 py-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      <span>Production-ready apps</span>
+              <div className="gradient-border max-w-sm rounded-[2rem] shadow-xl">
+                <div className="relative rounded-[2rem] bg-slate-50 dark:bg-slate-950 p-5">
+                  <div className="mb-4 flex items-center justify-between text-xs text-text-light-muted dark:text-text-dark-muted">
+                    <span className="font-semibold text-brand-blue dark:text-brand-blue-light">Featured Proof of Work</span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-slate-200/60 dark:bg-slate-800 px-2 py-0.5 font-medium">
+                      Live Project
                     </span>
                   </div>
 
-                  <p className="mb-2 text-[11px] uppercase tracking-[0.2em] text-accent-gold">
-                    FEATURED MOBILE STACK
-                  </p>
-                  <ul className="mb-4 flex flex-wrap gap-2 text-[11px]">
-                    {[
-                      'React Native',
-                      'TypeScript',
-                      'Expo',
-                      'React Navigation',
-                      'Node.js',
-                      'MongoDB',
-                    ].map(tool => (
-                      <li
-                        key={tool}
-                        className="rounded-full bg-black/40 px-3 py-1 text-text-main/80"
-                      >
-                        {tool}
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Phone Screen Mockup inside Card */}
+                  <div className="relative mx-auto w-full max-w-[240px] rounded-[1.8rem] border-4 border-slate-300 dark:border-slate-800 overflow-hidden bg-black aspect-[9/16] shadow-md">
+                    <img 
+                      src={wayGoodScreen} 
+                      alt="WayGood App UI" 
+                      className="w-full h-full object-cover" 
+                    />
+                  </div>
 
-                  <p className="text-[11px] text-text-muted">
-                    Smooth navigation, responsive layouts, offline-ready features, and
-                    integrations with APIs & backend services — all tuned for real users on
-                    real devices.
+                  <p className="mt-4 text-xs font-bold uppercase tracking-wider text-brand-blue dark:text-brand-blue-light">
+                    WayGood HelpStudyAbroad
+                  </p>
+                  <p className="mt-1 text-[11px] text-text-light-muted dark:text-text-dark-muted">
+                    Built 20+ Figma screens, custom dual theme system, and core app architecture for Play Store launch.
                   </p>
                 </div>
               </div>
@@ -201,44 +232,237 @@ const Home: React.FC = () => {
           </div>
         </section>
 
-        {/* TEASER ABOUT SECTION BELOW HERO */}
+        {/* TEASER ABOUT SECTION */}
         <AnimatedSection
           id="about"
-          className="border-none"
+          className="border-t border-slate-200/50 dark:border-slate-800/50"
+          variant="slide-right"
         >
           <div
             ref={aboutRef}
-            className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center py-20"
+            className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center px-6"
           >
             {/* LEFT SIDE — ABOUT TEXT */}
-            <div className="flex-1 about-animate">
+            <div className="flex-[1.2] about-animate">
               <SectionHeading
-                eyebrow="About"
-                title="Designing apps that feel native and thoughtful"
-                subtitle="I build mobile experiences that look sharp, feel smooth, and respect the constraints of real devices."
+                eyebrow="About Me"
+                title="Specialized Mobile App Developer"
+                subtitle="I combine pixel-accurate frontend implementations with robust native CLI builds."
               />
 
-              <p className="mt-4 text-sm text-text-muted leading-relaxed">
-                From navigation flows and onboarding screens to offline states and push
-                notifications, I care about how every part of an app comes together. My
-                focus is on React Native + TypeScript, with experience using Expo,
-                custom animations, and backend APIs to ship features quickly without
-                sacrificing quality.
+              <p className="mt-4 text-sm text-text-light-muted dark:text-text-dark-muted leading-relaxed">
+                Currently, I serve as the **Sole React Native Developer** at **WayGood Edtech Private Limited**, where I built the HelpStudyAbroad mobile app from the ground up (React Native CLI + TypeScript). I specialize in Figma-to-code implementations, custom system themes (light/dark transitions), reusable component libraries, and integration with live REST APIs.
+              </p>
+              
+              <p className="mt-3 text-sm text-text-light-muted dark:text-text-dark-muted leading-relaxed">
+                Graduating with a B.Tech in CSE (Artificial Intelligence & Machine Learning) from **SRM Institute of Science and Technology**, I bring strong mathematical fundamentals and algorithms to client application performance.
               </p>
             </div>
 
-            {/* RIGHT SIDE — SNAPSHOT CARD */}
-            <div className="flex-1 rounded-3xl border border-slate-800 bg-deep-blue-soft/70 p-6 text-sm text-text-muted shadow-soft-glow about-animate">
-              <p className="mb-3 text-xs uppercase tracking-[0.2em] text-accent-gold">
-                Snapshot
+            {/* RIGHT SIDE — KEY HIGHLIGHTS */}
+            <div className="flex-1 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-6 text-sm text-text-light-muted dark:text-text-dark-muted shadow-sm about-animate">
+              <p className="mb-4 text-xs font-bold uppercase tracking-wider text-brand-blue dark:text-brand-blue-light">
+                Professional Competency
               </p>
 
-              <ul className="space-y-2 text-xs leading-relaxed">
-                <li>• Building cross-platform apps with React Native & Expo</li>
-                <li>• Comfortable integrating REST/GraphQL APIs & real-time features</li>
-                <li>• Focused on performance, accessibility, and smooth animations</li>
-                <li>• Experience with Node.js backends & database integrations</li>
+              <ul className="space-y-3 text-xs">
+                <li className="flex items-start gap-2">
+                  <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
+                  <span>Figma-to-code pixel-accurate layouts for mobile</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
+                  <span>React Native CLI, Expo, & Flutter implementation</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
+                  <span>Custom light/dark design theme systems</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
+                  <span>REST API integration & state management (Zustand/Redux)</span>
+                </li>
               </ul>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* SKILLS PREVIEW */}
+        <AnimatedSection id="skills" className="border-t border-slate-200/50 dark:border-slate-800/50" variant="scale">
+          <div className="mx-auto max-w-6xl px-6">
+            <SectionHeading
+              eyebrow="Skills"
+              title="Technical Stack"
+              subtitle="The languages, frameworks, and UI toolsets I rely on."
+            />
+            <div className="mt-6 flex flex-wrap gap-2.5">
+              {[
+                'React Native CLI',
+                'Flutter',
+                'TypeScript',
+                'Expo',
+                'React Navigation',
+                'Figma-to-code',
+                'Custom theme systems',
+                'Animations (Reanimated)',
+                'Redux Toolkit / Zustand',
+                'REST APIs',
+                'Android Studio / Xcode',
+                'Git & GitHub'
+              ].map(skill => (
+                <span
+                  key={skill}
+                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4.5 py-2 text-xs font-medium text-text-light-main dark:text-text-dark-main shadow-sm"
+                  data-cursor="card"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+            <div className="mt-8">
+              <Link
+                to="/skills"
+                className="text-sm font-semibold text-brand-blue dark:text-brand-blue-light hover:underline"
+                data-cursor="button"
+              >
+                View categorized skillset →
+              </Link>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* PROJECTS PREVIEW */}
+        <AnimatedSection id="projects" className="border-t border-slate-200/50 dark:border-slate-800/50" variant="slide-left">
+          <div className="mx-auto max-w-6xl px-6">
+            <SectionHeading
+              eyebrow="Work"
+              title="Featured Mobile Applications"
+              subtitle="Selected React Native apps engineered for production."
+            />
+            
+            <div className="mt-8 grid gap-8 md:grid-cols-3">
+              {projects.map(project => (
+                <article
+                  key={project.id}
+                  className="group flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue/60 dark:hover:border-brand-blue-light/60"
+                  data-cursor="card"
+                  data-cursor-label="VIEW"
+                >
+                  <div className="flex items-center justify-between text-xs text-text-light-muted dark:text-text-dark-muted mb-2">
+                    <span>{project.year}</span>
+                    <span className="font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800">
+                      {project.platform.split('·')[0].trim()}
+                    </span>
+                  </div>
+
+                  <h3 className="font-display text-lg font-bold text-text-light-main dark:text-text-dark-main mb-1.5 group-hover:text-brand-blue dark:group-hover:text-brand-blue-light transition-colors">
+                    {project.title}
+                  </h3>
+
+                  <p className="text-xs text-text-light-muted dark:text-text-dark-muted line-clamp-3 mb-4 leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  <div className="text-[11px] font-semibold text-brand-blue dark:text-brand-blue-light mb-4 border-l-2 border-brand-blue/30 pl-2">
+                    {project.outcome}
+                  </div>
+
+                  <div className="mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+                    <Link
+                      to={`/portfolio/${project.slug}`}
+                      className="text-xs font-bold text-brand-blue dark:text-brand-blue-light hover:underline"
+                      data-cursor="button"
+                    >
+                      Case Study →
+                    </Link>
+                    
+                    {project.repo && (
+                      <a
+                        href={project.repo}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs font-medium text-text-light-muted dark:text-text-dark-muted hover:text-brand-blue dark:hover:text-brand-blue-light"
+                      >
+                        GitHub ↗
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <Link
+                to="/portfolio"
+                className="inline-flex rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-2.5 text-xs font-bold hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+                data-cursor="button"
+              >
+                Browse All Projects
+              </Link>
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* BLOG PREVIEW */}
+        <AnimatedSection id="blog" className="border-t border-slate-200/50 dark:border-slate-800/50" variant="fade-up">
+          <div className="mx-auto max-w-6xl px-6">
+            <SectionHeading
+              eyebrow="Blog"
+              title="Mobile Development Writing"
+              subtitle="Notes on React Native performance, custom themes, and styling mobile interfaces."
+            />
+            <div className="mt-8 grid gap-6 md:grid-cols-2">
+              {blogPosts.slice(0, 2).map(post => (
+                <article
+                  key={post.id}
+                  className="group rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1"
+                  data-cursor="card"
+                  data-cursor-label="READ"
+                >
+                  <p className="text-[11px] font-bold uppercase tracking-wider text-text-light-muted dark:text-text-dark-muted mb-2">
+                    {new Date(post.date).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}
+                  </p>
+                  <h3 className="font-display text-base font-bold text-text-light-main dark:text-text-dark-main mb-2 group-hover:text-brand-blue dark:group-hover:text-brand-blue-light transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-xs text-text-light-muted dark:text-text-dark-muted line-clamp-3 mb-4 leading-relaxed">{post.excerpt}</p>
+                  <Link
+                    to={`/blog/${post.slug}`}
+                    className="text-xs font-bold text-brand-blue dark:text-brand-blue-light hover:underline"
+                    data-cursor="button"
+                  >
+                    Read Article →
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </div>
+        </AnimatedSection>
+
+        {/* CONTACT PREVIEW */}
+        <AnimatedSection id="contact" className="border-t border-slate-200/50 dark:border-slate-800/50" variant="scale">
+          <div className="mx-auto max-w-4xl px-6 text-center">
+            <SectionHeading
+              eyebrow="Hire Me"
+              title="Let's build your next mobile application"
+              subtitle="Available for React Native and Flutter freelance projects. Response within 24 hours."
+              align="center"
+            />
+            <div className="mt-6 flex flex-wrap justify-center gap-4">
+              <MagneticButton
+                asChild
+                className="rounded-2xl bg-brand-blue hover:bg-brand-blue-light dark:bg-brand-blue-light dark:hover:bg-brand-blue text-white px-8 py-3.5 text-sm font-semibold shadow-md transition-colors"
+                data-cursor-label="CONTACT"
+              >
+                <Link to="/contact">Get in Touch</Link>
+              </MagneticButton>
+              <MagneticButton
+                asChild
+                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-8 py-3.5 text-sm font-semibold text-text-light-main dark:text-text-dark-main hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                data-cursor-label="CONTRA"
+              >
+                <a href="https://contra.com/satvik_singh_bz2tq3zn" target="_blank" rel="noreferrer">Contra Profile</a>
+              </MagneticButton>
             </div>
           </div>
         </AnimatedSection>
