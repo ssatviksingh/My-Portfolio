@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Satvik Singh — React Native Developer</title>
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks to see if a redirect is present in the query string,
+      // converts it back into the correct url and adds it to the
+      // browser's history using window.history.replaceState.
+      
+      // The number of path segments to keep as base directory path before the repo
+      // e.g. for https://username.github.io/repo-name/ the count is 1
+      var segmentCount = 1;
+
+      var l = window.location;
+      // Redirect to the index.html with the route formatted as a hash route
+      var path = l.pathname.split('/').slice(segmentCount + 1).join('/');
+      var search = l.search;
+      var hash = l.hash;
+
+      var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + 
+                        '/' + l.pathname.split('/')[1] + '/#/' + path + search + hash;
+      l.replace(redirectUrl);
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
