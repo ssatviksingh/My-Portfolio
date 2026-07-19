@@ -4,6 +4,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { blogPosts } from '../data/blogPosts';
 import { gsap } from 'gsap';
 import MouseParallaxWrapper from '../components/common/MouseParallaxWrapper';
+import { isPrerenderEnv } from '../utils/prerender';
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -19,10 +20,10 @@ const BlogPost: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, [slug]);
 
-  // fade-in animation
+  // fade-in animation — skip in prerender so content is not opacity:0
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el || isPrerenderEnv()) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(

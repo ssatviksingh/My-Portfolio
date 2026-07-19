@@ -9,6 +9,7 @@ import {
 } from '../../data/projects';
 import ProjectPhoneFrame from './ProjectPhoneFrame';
 import { fadeUp } from '../motion/variants';
+import { isPrerenderEnv } from '../../utils/prerender';
 
 export type ProjectCardVariant = 'showcase' | 'compact';
 
@@ -26,20 +27,28 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   const outcome = getProjectOutcome(project);
   const visibleTech = variant === 'compact' ? tech.slice(0, 4) : tech.slice(0, 6);
   const reduceMotion = useReducedMotion();
-  const hoverMotion = reduceMotion
+  const prerender = isPrerenderEnv();
+  const MotionTag = prerender ? 'article' : motion.article;
+  const hoverMotion =
+    reduceMotion || prerender
+      ? {}
+      : {
+          whileHover: {
+            y: -6,
+            transition: { type: 'spring' as const, stiffness: 420, damping: 28 },
+          },
+        };
+  const motionProps = prerender
     ? {}
     : {
-        whileHover: {
-          y: -6,
-          transition: { type: 'spring' as const, stiffness: 420, damping: 28 },
-        },
+        variants: fadeUp,
+        ...hoverMotion,
       };
 
   if (variant === 'compact') {
     return (
-      <motion.article
-        variants={fadeUp}
-        {...hoverMotion}
+      <MotionTag
+        {...motionProps}
         className="group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/80 p-6 shadow-[0_1px_0_rgba(15,23,42,0.04)] transition-shadow duration-300 hover:border-brand-blue/50 hover:shadow-[0_18px_40px_-24px_rgba(37,99,235,0.45)] dark:border-slate-800 dark:from-slate-900/80 dark:to-slate-950/80 dark:hover:border-brand-blue-light/40"
         data-cursor="card"
         data-cursor-label="VIEW"
@@ -90,14 +99,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
             </a>
           )}
         </div>
-      </motion.article>
+      </MotionTag>
     );
   }
 
   return (
-    <motion.article
-      variants={fadeUp}
-      {...hoverMotion}
+    <MotionTag
+      {...motionProps}
       className="group relative flex flex-col overflow-hidden rounded-[1.85rem] border border-slate-200/80 bg-white shadow-[0_1px_0_rgba(15,23,42,0.04)] transition-shadow duration-300 hover:border-brand-blue/45 hover:shadow-[0_28px_60px_-32px_rgba(37,99,235,0.55)] dark:border-slate-800/90 dark:bg-slate-900/55 dark:hover:border-brand-blue-light/40"
       data-cursor="card"
       data-cursor-label="VIEW"
@@ -178,7 +186,7 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
           </div>
         </div>
       </div>
-    </motion.article>
+    </MotionTag>
   );
 };
 

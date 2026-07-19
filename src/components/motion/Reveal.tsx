@@ -7,6 +7,7 @@ import {
   slideRight,
   staggerContainer,
 } from './variants';
+import { isPrerenderEnv } from '../../utils/prerender';
 
 type RevealVariant = 'fade-up' | 'scale' | 'slide-left' | 'slide-right';
 
@@ -33,9 +34,11 @@ export const Reveal: React.FC<RevealProps> = ({
   delay = 0,
 }) => {
   const reduceMotion = useReducedMotion();
+  const prerender = isPrerenderEnv();
   const Component = motion[as];
 
-  if (reduceMotion) {
+  // Final visible state baked into HTML — no opacity:0 / translate capture
+  if (reduceMotion || prerender) {
     const Tag = as;
     return <Tag className={className}>{children}</Tag>;
   }
@@ -67,9 +70,10 @@ export const Stagger: React.FC<StaggerProps> = ({
   as = 'div',
 }) => {
   const reduceMotion = useReducedMotion();
+  const prerender = isPrerenderEnv();
   const Component = motion[as];
 
-  if (reduceMotion) {
+  if (reduceMotion || prerender) {
     const Tag = as;
     return <Tag className={className}>{children}</Tag>;
   }

@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionHeading from "../components/common/SectionHeading";
+import { isPrerenderEnv } from "../utils/prerender";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,11 +11,12 @@ const About: React.FC = () => {
   const motionRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const statsRef = useRef<HTMLDivElement | null>(null);
+  const prerender = isPrerenderEnv();
 
   // Cursor parallax
   useEffect(() => {
     const el = motionRef.current;
-    if (!el) return;
+    if (!el || prerender) return;
 
     const handleMove = (e: MouseEvent) => {
       const x = (e.clientX - window.innerWidth / 2) / 50;
@@ -25,11 +27,11 @@ const About: React.FC = () => {
 
     window.addEventListener("mousemove", handleMove);
     return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
+  }, [prerender]);
 
-  // Scroll reveal
+  // Scroll reveal — skipped in prerender so opacity stays at 1
   useEffect(() => {
-    if (!sectionRef.current) return;
+    if (prerender || !sectionRef.current) return;
 
     const blocks = sectionRef.current.querySelectorAll(".about-block");
 
@@ -48,11 +50,11 @@ const About: React.FC = () => {
         },
       }
     );
-  }, []);
+  }, [prerender]);
 
   // Stats counter animation
   useEffect(() => {
-    if (!statsRef.current) return;
+    if (prerender || !statsRef.current) return;
     const numbers = statsRef.current.querySelectorAll(".stat-number");
 
     numbers.forEach((n) => {
@@ -70,7 +72,7 @@ const About: React.FC = () => {
         }
       );
     });
-  }, []);
+  }, [prerender]);
 
   return (
     <main className="relative px-6 pt-24 pb-20 overflow-hidden bg-bg-light dark:bg-bg-dark text-text-light-main dark:text-text-dark-main transition-colors duration-300">
@@ -111,7 +113,7 @@ const About: React.FC = () => {
                 className="about-block rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 text-center shadow-sm"
               >
                 <p className="stat-number font-display text-3xl font-extrabold text-brand-blue dark:text-brand-blue-light" data-value={stat.value}>
-                  0
+                  {prerender ? stat.value : 0}
                 </p>
                 <p className="mt-2 text-xs font-semibold text-text-light-muted dark:text-text-dark-muted">{stat.label}</p>
               </div>

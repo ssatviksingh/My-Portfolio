@@ -13,14 +13,17 @@ import { Stagger } from '../components/motion/Reveal';
 import { heroContainer, heroItem } from '../components/motion/variants';
 import HeroVisual from '../components/hero/HeroVisual';
 import wayGoodScreen from '../assets/WayGoodHelpStudyAbroad1.png';
+import { isPrerenderEnv } from '../utils/prerender';
 
 const Home: React.FC = () => {
   const motionRef = useRef<HTMLDivElement | null>(null);
   const floatingRef = useRef<HTMLDivElement | null>(null);
   const reduceMotion = useReducedMotion();
+  const prerender = isPrerenderEnv();
+  const skipEntrance = Boolean(reduceMotion || prerender);
 
   const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (reduceMotion) return;
+    if (skipEntrance) return;
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -49,7 +52,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     const floatingEl = floatingRef.current;
-    if (!floatingEl || reduceMotion) return;
+    if (!floatingEl || skipEntrance) return;
 
     const ctx = gsap.context(() => {
       gsap.to(floatingEl, {
@@ -62,11 +65,11 @@ const Home: React.FC = () => {
     });
 
     return () => ctx.revert();
-  }, [reduceMotion]);
+  }, [skipEntrance]);
 
   useEffect(() => {
     const el = motionRef.current;
-    if (!el || reduceMotion) return;
+    if (!el || skipEntrance) return;
 
     const handleMove = (e: MouseEvent) => {
       const x = (e.clientX - window.innerWidth / 2) / 50;
@@ -82,7 +85,7 @@ const Home: React.FC = () => {
 
     window.addEventListener('mousemove', handleMove);
     return () => window.removeEventListener('mousemove', handleMove);
-  }, [reduceMotion]);
+  }, [skipEntrance]);
 
   const handleScrollToProjects = () => {
     const projectsSec = document.getElementById('projects');
@@ -111,7 +114,7 @@ const Home: React.FC = () => {
             <motion.div
               className="flex-[1.2] space-y-6"
               variants={heroContainer}
-              initial={reduceMotion ? false : 'hidden'}
+              initial={skipEntrance ? false : 'hidden'}
               animate="show"
             >
               <motion.p

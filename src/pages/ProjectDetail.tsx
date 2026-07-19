@@ -7,6 +7,7 @@ import {
   getProjectTech,
 } from '../data/projects';
 import ProjectPhoneFrame from '../components/projects/ProjectPhoneFrame';
+import { isPrerenderEnv } from '../utils/prerender';
 
 const ProjectDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -20,7 +21,7 @@ const ProjectDetail: React.FC = () => {
 
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
+    if (!el || isPrerenderEnv()) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(

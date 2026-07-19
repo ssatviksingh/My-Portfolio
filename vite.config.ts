@@ -27,9 +27,12 @@ export default defineConfig({
             rendererOptions: {
               inject: { prerender: true },
               injectProperty: '__PRERENDER_INJECTED',
+              // App dispatches this after paint; animations are already final in prerender env
               renderAfterDocumentEvent: 'prerender-ready',
-              maxConcurrentRoutes: 2,
-              timeout: 45000,
+              // Safety net if the event is missed (headless still gets final styles via isPrerenderEnv)
+              renderAfterTime: 1500,
+              maxConcurrentRoutes: 1,
+              timeout: 60000,
               headless: true,
               args: ['--no-sandbox', '--disable-setuid-sandbox'],
             },

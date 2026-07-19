@@ -1,11 +1,7 @@
 import React from 'react';
 import { AnimatePresence, motion, type Variants } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
-
-const isPrerenderEnv = () =>
-  typeof navigator !== 'undefined' &&
-  (navigator.userAgent.includes('HeadlessChrome') ||
-    Boolean((window as Window & { __PRERENDER_INJECTED?: unknown }).__PRERENDER_INJECTED));
+import { isPrerenderEnv } from '../../utils/prerender';
 
 const variants: Variants = {
   initial: { opacity: 0, y: 14 },
@@ -28,6 +24,7 @@ interface PageTransitionProps {
 export const PageTransition: React.FC<PageTransitionProps> = ({ children }) => {
   const location = useLocation();
 
+  // During prerender: no opacity:0 / y-offset — final layout only
   if (isPrerenderEnv()) {
     return <div key={location.pathname}>{children}</div>;
   }

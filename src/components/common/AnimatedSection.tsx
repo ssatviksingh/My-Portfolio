@@ -6,6 +6,7 @@ import {
   slideLeft,
   slideRight,
 } from '../motion/variants';
+import { isPrerenderEnv } from '../../utils/prerender';
 
 type AnimatedVariant = 'fade-up' | 'scale' | 'slide-left' | 'slide-right';
 
@@ -30,8 +31,9 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   variant = 'fade-up',
 }) => {
   const reduceMotion = useReducedMotion();
+  const prerender = isPrerenderEnv();
 
-  if (reduceMotion) {
+  if (reduceMotion || prerender) {
     return (
       <section id={id} className={`relative py-20 sm:py-24 ${className}`}>
         {children}
