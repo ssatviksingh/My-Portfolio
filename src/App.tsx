@@ -18,13 +18,28 @@ const DocumentHead: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const { pathname } = useLocation();
   useLenis();
+
+  // Signal headless prerenderer that Helmet + route UI are ready to capture
+  React.useEffect(() => {
+    const notify = () => {
+      document.dispatchEvent(new Event('prerender-ready'));
+    };
+
+    // Wait for Framer page enter (~350ms) + Helmet DOM patch
+    const timer = window.setTimeout(notify, 700);
+    return () => window.clearTimeout(timer);
+  }, [pathname]);
 
   return (
     <>
       <DocumentHead />
       <Cursor />
-      <div className="min-h-screen bg-bg-light text-text-light-main dark:bg-bg-dark dark:text-text-dark-main transition-colors duration-300">
+      <div
+        className="min-h-screen bg-bg-light text-text-light-main dark:bg-bg-dark dark:text-text-dark-main transition-colors duration-300"
+        data-app-ready="true"
+      >
         <ScrollToTop />
         <Navbar />
         <main className="pt-20">

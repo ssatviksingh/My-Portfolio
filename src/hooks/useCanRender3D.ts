@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 
 /**
- * Gate expensive WebGL. Prefer static fallback on touch / low-end / reduced-motion.
+ * Gate expensive WebGL. Prefer static fallback on touch / low-end / reduced-motion / prerender.
  */
 export function useCanRender3D(): boolean {
   const [canRender, setCanRender] = useState(false);
 
   useEffect(() => {
+    const isPrerender =
+      navigator.userAgent.includes('HeadlessChrome') ||
+      Boolean((window as Window & { __PRERENDER_INJECTED?: unknown }).__PRERENDER_INJECTED);
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
     const cores = navigator.hardwareConcurrency ?? 8;
@@ -17,7 +20,7 @@ export function useCanRender3D(): boolean {
         ?.saveData ?? false;
 
     const lowEnd = cores <= 4 || deviceMemory <= 4 || saveData;
-    setCanRender(!reducedMotion && !coarsePointer && !lowEnd);
+    setCanRender(!isPrerender && !reducedMotion && !coarsePointer && !lowEnd);
   }, []);
 
   return canRender;

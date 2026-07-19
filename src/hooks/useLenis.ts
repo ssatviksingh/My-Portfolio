@@ -7,12 +7,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const useLenis = () => {
   useEffect(() => {
+    const isPrerender =
+      navigator.userAgent.includes('HeadlessChrome') ||
+      Boolean((window as Window & { __PRERENDER_INJECTED?: unknown }).__PRERENDER_INJECTED);
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
-    // Native scroll on touch / reduced-motion — smoother and less janky there
-    if (prefersReduced || coarsePointer) {
-      document.documentElement.style.scrollBehavior = 'smooth';
+    // Native scroll on touch / reduced-motion / prerender — smoother and less janky there
+    if (isPrerender || prefersReduced || coarsePointer) {
+      document.documentElement.style.scrollBehavior = prefersReduced ? 'auto' : 'smooth';
       return;
     }
 
