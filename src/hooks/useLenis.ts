@@ -7,17 +7,29 @@ gsap.registerPlugin(ScrollTrigger);
 
 export const useLenis = () => {
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
+
+    // Native scroll on touch / reduced-motion — smoother and less janky there
+    if (prefersReduced || coarsePointer) {
+      document.documentElement.style.scrollBehavior = 'smooth';
+      return;
+    }
+
+    document.documentElement.style.scrollBehavior = 'auto';
+
     const lenis = new Lenis({
-      duration: 1.1,
-      easing: t => 1 - Math.pow(1 - t, 4),
+      duration: 1.05,
+      easing: (t) => 1 - Math.pow(1 - t, 4),
       smoothWheel: true,
     });
 
+    let frame = 0;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      frame = requestAnimationFrame(raf);
     }
-    requestAnimationFrame(raf);
+    frame = requestAnimationFrame(raf);
 
     lenis.on('scroll', ScrollTrigger.update);
 
@@ -38,15 +50,16 @@ export const useLenis = () => {
       },
     });
 
-    ScrollTrigger.addEventListener('refresh', () => {
-      lenis.resize();
-    });
+    const onRefresh = () => lenis.resize();
+    ScrollTrigger.addEventListener('refresh', onRefresh);
     ScrollTrigger.refresh();
 
     return () => {
+      cancelAnimationFrame(frame);
+      ScrollTrigger.removeEventListener('refresh', onRefresh);
       lenis.destroy();
-      ScrollTrigger.killAll();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      document.documentElement.style.scrollBehavior = '';
     };
   }, []);
 };
-

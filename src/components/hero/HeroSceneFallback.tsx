@@ -8,7 +8,7 @@ export const HeroSceneFallback: React.FC = () => {
       aria-hidden
     >
       <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/40 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
-      <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-brand-blue/20 blur-3xl animate-pulse dark:bg-brand-blue/25" />
+      <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full blur-3xl animate-pulse bg-[color:var(--hero-glow)]" />
       <div className="absolute right-[12%] top-[28%] h-40 w-40 rounded-full bg-brand-blue-light/25 blur-2xl dark:bg-sky-400/15" />
       <svg
         className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 opacity-40 dark:opacity-30"

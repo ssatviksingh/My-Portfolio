@@ -2,33 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global styles */
+/* Theme tokens — Framer / 3D / cursor can read these */
 :root {
   scroll-behavior: smooth;
+  --bg: #f8fafc;
+  --fg: #0f172a;
+  --muted: #64748b;
+  --brand: #074782;
+  --brand-soft: #0d5ca3;
+  --accent: #f4b41a;
+  --cursor-border: rgba(15, 23, 42, 0.45);
+  --surface: rgba(255, 255, 255, 0.8);
+  --hero-glow: rgba(7, 71, 130, 0.14);
+}
+
+html.dark {
+  --bg: #020617;
+  --fg: #e2e8f0;
+  --muted: #94a3b8;
+  --brand: #60a5fa;
+  --brand-soft: #93c5fd;
+  --accent: #f4b41a;
+  --cursor-border: rgba(148, 163, 184, 0.55);
+  --surface: rgba(15, 23, 42, 0.72);
+  --hero-glow: rgba(59, 130, 246, 0.22);
 }
 
 body {
   @apply bg-bg-light text-text-light-main font-body transition-colors duration-300;
+  background-color: var(--bg);
+  color: var(--fg);
 }
 
-/* Dark mode body */
 .dark body {
   @apply bg-bg-dark text-text-dark-main;
 }
 
-/* Custom scrollbar (optional) */
+/* Hide system cursor only when custom cursor is mounted (desktop fine pointer) */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none !important;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #074782;
+  background-color: var(--brand);
   border-radius: 9999px;
 }
 
-/* Utility for gradient borders or cards, if you want */
 .gradient-border {
-  background: linear-gradient(135deg, #074782, #0d5ca3, #f4b41a);
+  background: linear-gradient(135deg, var(--brand), var(--brand-soft), var(--accent));
   padding: 1px;
   border-radius: 1.5rem;
+}
+
+/* Respect reduced motion globally for CSS animations */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
