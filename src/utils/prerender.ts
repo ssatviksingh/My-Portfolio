@@ -1,3 +1,8 @@
+type PrerenderWindow = Window & {
+  __PRERENDER__?: unknown;
+  __PRERENDER_INJECTED?: unknown;
+};
+
 /**
  * Detect headless prerender (Puppeteer via @prerenderer).
  * When true, all entrance animations must render at their FINAL state
@@ -8,18 +13,23 @@ export function isPrerenderEnv(): boolean {
     return false;
   }
 
-  const injected = Boolean(
-    (window as Window & { __PRERENDER_INJECTED?: unknown }).__PRERENDER_INJECTED,
-  );
+  const w = window as PrerenderWindow;
+  const injected = Boolean(w.__PRERENDER__ ?? w.__PRERENDER_INJECTED);
   const headless = /HeadlessChrome|Chrome-Lighthouse|Puppeteer/i.test(navigator.userAgent);
 
   return injected || headless;
 }
 
-/** Mark <html> so Puppeteer can wait via renderAfterElementExists */
+/** Mark body/html so Puppeteer can wait via renderAfterElementExists */
 export function markPrerenderReady(): void {
   if (typeof document === 'undefined') return;
   document.documentElement.setAttribute('data-prerender-ready', 'true');
   document.body?.setAttribute('data-prerender-ready', 'true');
   document.dispatchEvent(new Event('prerender-ready'));
+}
+
+export function clearPrerenderReady(): void {
+  if (typeof document === 'undefined') return;
+  document.documentElement.removeAttribute('data-prerender-ready');
+  document.body?.removeAttribute('data-prerender-ready');
 }

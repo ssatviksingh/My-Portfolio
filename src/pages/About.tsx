@@ -4,10 +4,12 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionHeading from "../components/common/SectionHeading";
 import { isPrerenderEnv } from "../utils/prerender";
+import { usePrerenderReady } from "../hooks/usePrerenderReady";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const About: React.FC = () => {
+  usePrerenderReady();
   const motionRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const statsRef = useRef<HTMLDivElement | null>(null);
@@ -48,7 +50,7 @@ const About: React.FC = () => {
           trigger: sectionRef.current,
           start: "top 85%",
         },
-      }
+      },
     );
   }, [prerender]);
 
@@ -69,7 +71,7 @@ const About: React.FC = () => {
           ease: "power1.out",
           snap: { innerText: 1 },
           scrollTrigger: { trigger: n, start: "top 80%" },
-        }
+        },
       );
     });
   }, [prerender]);
@@ -91,13 +93,25 @@ const About: React.FC = () => {
           {/* Story Card */}
           <div className="about-block rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 sm:p-8 shadow-sm text-text-light-muted dark:text-text-dark-muted text-sm sm:text-base leading-relaxed space-y-4">
             <p>
-              I am a focused **React Native Developer** specializing in creating highly responsive, pixel-accurate mobile user interfaces from Figma specifications. Currently, I serve as the **Sole React Native Developer** at **WayGood Edtech Private Limited**, where I own the HelpStudyAbroad mobile app development lifecycle, targeting the Google Play Store launch.
+              I am a focused **React Native Developer** specializing in creating
+              highly responsive, pixel-accurate mobile user interfaces from
+              Figma specifications. Currently, I serve as the **Sole React
+              Native Developer** at **WayGood Edtech Private Limited**, where I
+              own the HelpStudyAbroad mobile app development lifecycle,
+              targeting the Google Play Store launch.
             </p>
             <p>
-              My engineering approach is driven by a B.Tech degree in **Computer Science & Engineering (Artificial Intelligence and Machine Learning)** from **SRM Institute of Science and Technology**. I leverage strong algorithmic foundations to manage application state, caching layers, and responsive UI layout efficiency.
+              My engineering approach is driven by a B.Tech degree in **Computer
+              Science & Engineering (Artificial Intelligence and Machine
+              Learning)** from **SRM Institute of Science and Technology**. I
+              leverage strong algorithmic foundations to manage application
+              state, caching layers, and responsive UI layout efficiency.
             </p>
             <p>
-              I specialize in creating custom component libraries, dual (light/dark) theme systems, offline SOS queues, and clean REST API integrations that run smoothly on real-world Android and iOS devices.
+              I specialize in creating custom component libraries, dual
+              (light/dark) theme systems, offline SOS queues, and clean REST API
+              integrations that run smoothly on real-world Android and iOS
+              devices.
             </p>
           </div>
 
@@ -105,17 +119,22 @@ const About: React.FC = () => {
           <div ref={statsRef} className="grid gap-6 mt-8 sm:grid-cols-3">
             {[
               { label: "Mobile App Screens Built", value: 35 },
-              { label: "B.Tech CSE (AI & ML) SRM", value: 2025 },
+              { label: "B.Tech CSE (AI & ML) SRM", value: 2026 },
               { label: "Freelance Direct Channels", value: 5 },
             ].map((stat) => (
               <div
                 key={stat.label}
                 className="about-block rounded-3xl bg-white dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 p-6 text-center shadow-sm"
               >
-                <p className="stat-number font-display text-3xl font-extrabold text-brand-blue dark:text-brand-blue-light" data-value={stat.value}>
+                <p
+                  className="stat-number font-display text-3xl font-extrabold text-brand-blue dark:text-brand-blue-light"
+                  data-value={stat.value}
+                >
                   {prerender ? stat.value : 0}
                 </p>
-                <p className="mt-2 text-xs font-semibold text-text-light-muted dark:text-text-dark-muted">{stat.label}</p>
+                <p className="mt-2 text-xs font-semibold text-text-light-muted dark:text-text-dark-muted">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
@@ -129,20 +148,25 @@ const About: React.FC = () => {
             <div className="relative border-l border-slate-200 dark:border-slate-800 ml-4 space-y-8">
               {[
                 {
-                  year: "2024 - Present",
-                  title: "Sole React Native Developer (Intern) — WayGood Edtech",
-                  description: "Took complete ownership of HelpStudyAbroad mobile application. Translated 20+ Figma mockups into a responsive, modular app utilizing React Native CLI and TypeScript. Implemented a custom dark/light theme toggle system and live REST APIs."
+                  year: "2026 April - Present",
+                  title:
+                    "Sole React Native Developer (Intern) — WayGood Edtech",
+                  description:
+                    "Took complete ownership of HelpStudyAbroad mobile application. Translated 20+ Figma mockups into a responsive, modular app utilizing React Native CLI and TypeScript. Implemented a custom dark/light theme toggle system and live REST APIs.",
                 },
                 {
-                  year: "2021 - 2025",
-                  title: "B.Tech CSE (AI & ML) — SRM Institute of Science and Technology",
-                  description: "Rigorous coursework in core computer science, software design, mathematical logic, and machine learning architectures."
+                  year: "2022 - 2026",
+                  title:
+                    "B.Tech CSE (AI & ML) — SRM Institute of Science and Technology",
+                  description:
+                    "Rigorous coursework in core computer science, software design, mathematical logic, and machine learning architectures.",
                 },
                 {
                   year: "2023",
                   title: "Independent Mobile CLI Engineer",
-                  description: "Designed multi-device compatible, performance-optimized clone applications and personal tools to master React Native CLI navigation and AsyncStorage."
-                }
+                  description:
+                    "Designed multi-device compatible, performance-optimized clone applications and personal tools to master React Native CLI navigation and AsyncStorage.",
+                },
               ].map((item) => (
                 <div key={item.title} className="relative pl-6 about-block">
                   <div className="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full bg-brand-blue dark:bg-brand-blue-light" />

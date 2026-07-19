@@ -1,66 +1,84 @@
 import { useEffect } from 'react';
-import Lenis from '@studio-freight/lenis';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { isPrerenderEnv } from '../utils/prerender';
 
-gsap.registerPlugin(ScrollTrigger);
-
+/**
+ * Smooth scroll (Lenis) for desktop fine-pointer only.
+ * Dynamically imports Lenis/GSAP so mobile never pays for those bundles.
+ */
 export const useLenis = () => {
   useEffect(() => {
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
 
-    // Native scroll on touch / reduced-motion / prerender — smoother and less janky there
     if (isPrerenderEnv() || prefersReduced || coarsePointer) {
       document.documentElement.style.scrollBehavior = prefersReduced ? 'auto' : 'smooth';
       return;
     }
 
+    let cancelled = false;
+    let cleanup: (() => void) | undefined;
+
     document.documentElement.style.scrollBehavior = 'auto';
 
-    const lenis = new Lenis({
-      duration: 1.05,
-      easing: (t) => 1 - Math.pow(1 - t, 4),
-      smoothWheel: true,
-    });
+    (async () => {
+      const [{ default: Lenis }, { gsap }, { ScrollTrigger }] = await Promise.all([
+        import('@studio-freight/lenis'),
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
 
-    let frame = 0;
-    function raf(time: number) {
-      lenis.raf(time);
+      if (cancelled) return;
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const lenis = new Lenis({
+        duration: 1.05,
+        easing: (t: number) => 1 - Math.pow(1 - t, 4),
+        smoothWheel: true,
+      });
+
+      let frame = 0;
+      function raf(time: number) {
+        lenis.raf(time);
+        frame = requestAnimationFrame(raf);
+      }
       frame = requestAnimationFrame(raf);
-    }
-    frame = requestAnimationFrame(raf);
 
-    lenis.on('scroll', ScrollTrigger.update);
+      lenis.on('scroll', ScrollTrigger.update);
 
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        if (value !== undefined) {
-          lenis.scrollTo(value);
-        }
-        return lenis.scroll;
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
-      },
-    });
+      ScrollTrigger.scrollerProxy(document.body, {
+        scrollTop(value) {
+          if (value !== undefined) {
+            lenis.scrollTo(value);
+          }
+          return lenis.scroll;
+        },
+        getBoundingClientRect() {
+          return {
+            top: 0,
+            left: 0,
+            width: window.innerWidth,
+            height: window.innerHeight,
+          };
+        },
+      });
 
-    const onRefresh = () => lenis.resize();
-    ScrollTrigger.addEventListener('refresh', onRefresh);
-    ScrollTrigger.refresh();
+      const onRefresh = () => lenis.resize();
+      ScrollTrigger.addEventListener('refresh', onRefresh);
+      ScrollTrigger.refresh();
+
+      cleanup = () => {
+        cancelAnimationFrame(frame);
+        ScrollTrigger.removeEventListener('refresh', onRefresh);
+        lenis.destroy();
+        ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+        document.documentElement.style.scrollBehavior = '';
+      };
+    })();
 
     return () => {
-      cancelAnimationFrame(frame);
-      ScrollTrigger.removeEventListener('refresh', onRefresh);
-      lenis.destroy();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-      document.documentElement.style.scrollBehavior = '';
+      cancelled = true;
+      cleanup?.();
     };
   }, []);
 };

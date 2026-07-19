@@ -8,8 +8,10 @@ import {
 } from '../data/projects';
 import ProjectPhoneFrame from '../components/projects/ProjectPhoneFrame';
 import { isPrerenderEnv } from '../utils/prerender';
+import { usePrerenderReady } from '../hooks/usePrerenderReady';
 
 const ProjectDetail: React.FC = () => {
+  usePrerenderReady();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);

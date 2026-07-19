@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import prerender from '@prerenderer/rollup-plugin';
+import type { Page } from 'puppeteer';
 import { allRouteMeta, SITE_URL } from './src/seo/routeMeta';
 
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
@@ -10,8 +11,55 @@ const rootDir = path.dirname(fileURLToPath(import.meta.url));
 /** Explicit route list for headless prerender — keep in sync with AppRouter + routeMeta */
 export const PRERENDER_ROUTES = allRouteMeta.map((route) => route.path);
 
-// Vercel build images lack Puppeteer system libs — prerender locally, then `vercel deploy --prebuilt`
+// Vercel build images lack Puppeteer system libs — prerender in GHA/local, then deploy dist/
 const shouldPrerender = process.env.VERCEL !== '1';
+
+/**
+ * Wait strategy:
+ * - element (default/PRIMARY): page.waitForSelector('body[data-prerender-ready="true"]')
+ *   via pageHandler. Do NOT use renderAfterElementExists alone — @prerenderer leaves a
+ *   hanging evaluate() that throws "Promise was collected" when the page closes.
+ * - event (FALLBACK): renderAfterDocumentEvent 'prerender-ready' only — no fixed delay
+ *
+ * Override: PRERENDER_WAIT=element|event
+ */
+const waitStrategy = (process.env.PRERENDER_WAIT || 'element').toLowerCase();
+const useElementWait = waitStrategy !== 'event';
+
+const READY_SELECTOR = 'body[data-prerender-ready="true"]';
+
+if (shouldPrerender) {
+  console.log(
+    `\n[prerender] wait strategy: ${
+      useElementWait
+        ? `PRIMARY (pageHandler → waitForSelector('${READY_SELECTOR}'))`
+        : 'FALLBACK (renderAfterDocumentEvent → prerender-ready)'
+    }\n`,
+  );
+}
+
+const rendererOptions = useElementWait
+  ? {
+      inject: { prerender: true },
+      injectProperty: '__PRERENDER__',
+      // Wait for body ready BEFORE capture (same contract as waitForSelector)
+      pageHandler: async (page: Page) => {
+        await page.waitForSelector(READY_SELECTOR, { timeout: 60000 });
+      },
+      maxConcurrentRoutes: 1,
+      timeout: 60000,
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    }
+  : {
+      inject: { prerender: true },
+      injectProperty: '__PRERENDER__',
+      renderAfterDocumentEvent: 'prerender-ready',
+      maxConcurrentRoutes: 1,
+      timeout: 60000,
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    };
 
 export default defineConfig({
   base: '/',
@@ -20,22 +68,10 @@ export default defineConfig({
     react(),
     ...(shouldPrerender
       ? [
-          // POST-BUILD: serves dist/, crawls each route in headless Chrome, writes HTML back
           prerender({
             routes: PRERENDER_ROUTES,
             renderer: '@prerenderer/renderer-puppeteer',
-            rendererOptions: {
-              inject: { prerender: true },
-              injectProperty: '__PRERENDER_INJECTED',
-              // App dispatches this after paint; animations are already final in prerender env
-              renderAfterDocumentEvent: 'prerender-ready',
-              // Safety net if the event is missed (headless still gets final styles via isPrerenderEnv)
-              renderAfterTime: 1500,
-              maxConcurrentRoutes: 1,
-              timeout: 60000,
-              headless: true,
-              args: ['--no-sandbox', '--disable-setuid-sandbox'],
-            },
+            rendererOptions,
             postProcess(renderedRoute) {
               let html = renderedRoute.html
                 .replace(/https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?/gi, SITE_URL)
@@ -87,14 +123,12 @@ export default defineConfig({
       : []),
   ],
   build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes('three') || id.includes('@react-three')) {
-            return 'three';
-          }
-        },
-      },
+    // Do not force-split three into a shared chunk — that pulled React into
+    // three-*.js and made every route download WebGL. Natural dynamic-import
+    // splitting from HeroVisual's React.lazy keeps three off the critical path.
+    modulePreload: {
+      resolveDependencies: (_filename, deps) =>
+        deps.filter((dep) => !dep.includes('three') && !dep.includes('HeroScene')),
     },
   },
 });

@@ -1,7 +1,9 @@
 import MouseParallaxWrapper from '../components/common/MouseParallaxWrapper';
 import AnimatedSection from '../components/common/AnimatedSection';
+import { usePrerenderReady } from '../hooks/usePrerenderReady';
 
 const ThankYou: React.FC = () => {
+  usePrerenderReady();
   return (
     <MouseParallaxWrapper intensity={15}>
       <AnimatedSection id="thank-you" className="bg-bg-light dark:bg-bg-dark text-text-light-main dark:text-text-dark-main transition-colors duration-300">

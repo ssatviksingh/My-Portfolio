@@ -1,191 +1,81 @@
-# 🚀 **Satvik Singh — Mobile App Developer**
-### **React Native | TypeScript | Expo | Animations | UI/UX**
+# Satvik Singh — Mobile App Developer
+### React Native | TypeScript | Expo | Animations | UI/UX
 
-📱 Building smooth, modern and production-ready mobile apps  
-
----
-
-## 🚀 **Live Portfolio**
-🔗 https://my-portfolio-coral-seven-61.vercel.app/
+Building smooth, modern and production-ready mobile apps.
 
 ---
 
-
-## ✨ **Projects Included in This Portfolio**
-
-### 📅 **Google Calendar Clone (Mobile)**
-A complete calendar app built with React Native & Expo featuring:
-- Monthly / Weekly / Daily views  
-- Animations + smooth transitions  
-- Reminder system  
-- Event creation  
-- Polished UI  
-
-**Tech:** React Native, TypeScript, Expo, MongoDB, Node.js  
+## Live Portfolio
+https://my-portfolio-coral-seven-61.vercel.app/
 
 ---
 
-### 🎬 **Netflix Clone (Mobile)**
-A fully functional Netflix-style mobile app:
-- Authentication  
-- Category browsing  
-- Video streaming layout  
-- Custom carousels  
-- Advanced UI animations  
+## CRITICAL: Deploy (read this before pushing)
 
-**Tech:** React Native, TypeScript, TMDB API, Expo  
+**Puppeteer cannot run on Vercel CI.** A normal “push → Vercel auto-build” produces a **stale, un-prerendered** SPA with no warning (empty `#root` for crawlers).
 
----
+| Do | Don't |
+|----|--------|
+| Push to `main` and let **GitHub Actions** build + deploy `dist/` | Rely on Vercel’s git Integration build |
+| Or run `npm run deploy` locally | Run `vercel --prod` from source without a local Puppeteer build |
 
-### 🎉 **Virtual Event Platform (Mobile App)**
-A mobile app for events, RSVPs, favorites, notifications & real-time updates.
+### GitHub Actions (preferred)
 
-**Tech:** React Native, Node.js, MongoDB, Expo  
+Workflow: [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
 
----
+Required repo secrets:
 
-### 🚨 Disaster Alert & SOS App (Mobile)
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
 
-A safety-focused emergency response mobile application featuring:
+In the Vercel project settings, keep **Install / Build commands empty** (or disabled) so a git-connected push cannot overwrite Actions deploys with an empty shell. Prefer deploying **only** via the Actions workflow or `npm run deploy`.
 
-Real-time disaster alerts
+### Local / manual
 
-Offline-first SOS system
-
-Live location sharing
-
-File attachments (images / documents)
-
-Retry queue for poor network conditions
-
-Accessibility-friendly UI for emergency scenarios
-
-Tech: React Native, TypeScript, Expo, Zustand, AsyncStorage, React Navigation, Node.js, Express, MongoDB, JWT Authentication
+```sh
+npm run deploy
+# same as: npm run build && vercel deploy ./dist --prod
+```
 
 ---
 
-## 🧰 **Tech Stack**
+## Projects in this portfolio
 
+Source of truth: [`src/data/projects.ts`](src/data/projects.ts)
+
+- WayGood HelpStudyAbroad
+- Disaster Alert & SOS
+- Virtual Event Platform
+- Personal Finance Companion
+- CalmCompanion
+
+Add a new project by appending one object to `projects` — detail routes are `/portfolio/:slug`.
+
+---
+
+## Tech Stack
 
 | Category | Technologies |
 |---------|--------------|
 | **Mobile** | React Native, Expo, TypeScript |
 | **Backend** | Node.js, Express, MongoDB |
-| **UI/UX** | Animations, Tailwind CSS (NativeWind) |
-| **Tools** | Git, GitHub, GSAP, REST APIs |
-
+| **Portfolio site** | Vite, React, Framer Motion, React Three Fiber, Tailwind |
+| **SEO** | Puppeteer prerender + react-helmet-async |
 
 ---
 
-## 🚀 **How to Run the Portfolio Locally**
+## Run locally
 
 ```sh
 git clone https://github.com/ssatviksingh/My-Portfolio
 cd My-Portfolio
 npm install
 npm run dev
-
 ```
 
-## 📬 Contact
+## Contact
 
-If you'd like to collaborate or have a project idea:
-
-Email: satviksingh164@gmail.com
-
-LinkedIn: https://www.linkedin.com/in/satvik-singh-785337287/
-
+Email: satviksingh164@gmail.com  
+LinkedIn: https://www.linkedin.com/in/satvik-singh-785337287/  
 GitHub: https://github.com/ssatviksingh
-
-
----
-
-🚀 Deploying to Vercel
-
-```sh
-npm run build
-vercel --prod
-```
-
-Or connect the GitHub repo at https://vercel.com for automatic deploys on every push.
-
----
-
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-
-<div align="center">
-⭐ If you like this portfolio, give the repo a star!
-</div> ```

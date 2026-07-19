@@ -5,8 +5,10 @@ import SectionHeading from '../components/common/SectionHeading';
 import { blogPosts } from '../data/blogPosts';
 import { Link } from 'react-router-dom';
 import MouseParallaxWrapper from '../components/common/MouseParallaxWrapper';
+import { usePrerenderReady } from '../hooks/usePrerenderReady';
 
 const BlogList: React.FC = () => {
+  usePrerenderReady();
   return (
     <MouseParallaxWrapper intensity={20}>
     <AnimatedSection id="blog">
@@ -39,7 +41,7 @@ const BlogList: React.FC = () => {
                   {new Date(post.date).toLocaleDateString()}
                 </p>
 
-                <h3 className="mb-2 font-display text-xl font-semibold text-white group-hover:text-accent-gold">
+                <h3 className="mb-2 font-display text-xl font-semibold text-text-dark-main">
                   {post.title}
                 </h3>
 
@@ -59,7 +61,7 @@ const BlogList: React.FC = () => {
                 <div className="mt-auto">
                   <Link
                     to={`/blog/${post.slug}`}
-                    className="text-sm font-medium text-accent-gold hover:text-accent-orange"
+                    className="text-sm font-medium text-text-dark-main underline decoration-accent-gold decoration-2 underline-offset-4"
                     data-cursor="button"
                     data-cursor-label="READ"
                   >

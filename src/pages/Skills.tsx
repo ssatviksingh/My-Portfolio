@@ -6,8 +6,10 @@ import { skills } from '../data/skills';
 import { Stagger } from '../components/motion/Reveal';
 import { fadeUp } from '../components/motion/variants';
 import { isPrerenderEnv } from '../utils/prerender';
+import { usePrerenderReady } from '../hooks/usePrerenderReady';
 
 const Skills: React.FC = () => {
+  usePrerenderReady();
   const motionRef = useRef<HTMLDivElement | null>(null);
   const prerender = isPrerenderEnv();
 

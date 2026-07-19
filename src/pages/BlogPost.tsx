@@ -5,8 +5,10 @@ import { blogPosts } from '../data/blogPosts';
 import { gsap } from 'gsap';
 import MouseParallaxWrapper from '../components/common/MouseParallaxWrapper';
 import { isPrerenderEnv } from '../utils/prerender';
+import { usePrerenderReady } from '../hooks/usePrerenderReady';
 
 const BlogPost: React.FC = () => {
+  usePrerenderReady();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -58,7 +60,7 @@ const BlogPost: React.FC = () => {
           This article could not be found. It may have been moved or renamed.
         </p>
         <button
-          className="text-sm text-accent-gold hover:text-accent-orange"
+          className="text-sm text-text-dark-main underline decoration-accent-gold decoration-2 underline-offset-4"
           onClick={() => navigate('/blog')}
         >
           ← Back to blog
@@ -76,7 +78,7 @@ const BlogPost: React.FC = () => {
         {/* Back link */}
         <Link
           to="/blog"
-          className="mb-4 inline-block text-sm text-accent-gold hover:text-accent-orange"
+          className="mb-4 inline-block text-sm text-text-dark-main underline decoration-accent-gold decoration-2 underline-offset-4"
         >
           ← Back to blog
         </Link>
@@ -189,7 +191,7 @@ const BlogPost: React.FC = () => {
                   <li key={rp.id}>
                     <Link
                       to={`/blog/${rp.slug}`}
-                      className="text-text-main hover:text-accent-gold"
+                      className="text-text-main underline decoration-transparent underline-offset-4 transition hover:decoration-accent-gold"
                     >
                       {rp.title}
                     </Link>

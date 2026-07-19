@@ -89,7 +89,7 @@ const Navbar: React.FC = () => {
     <header className="fixed top-0 z-40 w-full border-b border-slate-200/60 bg-bg-light/95 backdrop-blur-lg transition-colors duration-300 dark:border-slate-800/60 dark:bg-bg-dark/95">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
         <div className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-brand-blue via-brand-blue-light to-brand-blue shadow-soft-glow" />
+          <div className="h-9 w-9 bg-gradient-to-tr from-ink via-ink-soft to-accent-gold shadow-soft-glow dark:from-accent-gold dark:via-accent-gold-bright dark:to-chalk" />
           <div className="flex flex-col leading-tight">
             <span className="font-display text-lg font-semibold tracking-wide text-text-light-main dark:text-text-dark-main">
               Satvik Singh
@@ -117,9 +117,9 @@ const Navbar: React.FC = () => {
                     to={link.to}
                     onClick={handleNavClick(link.to)}
                     className={() =>
-                      `relative px-2 py-1 transition-colors hover:text-brand-blue dark:hover:text-brand-blue-light ${
+                      `relative px-2 py-1 transition-colors hover:text-text-light-main dark:hover:text-text-dark-main ${
                         isActive
-                          ? 'font-semibold text-brand-blue dark:text-brand-blue-light'
+                          ? 'font-semibold text-text-light-main dark:text-text-dark-main'
                           : 'text-text-light-muted dark:text-text-dark-muted'
                       }`
                     }
@@ -130,7 +130,7 @@ const Navbar: React.FC = () => {
                     {isActive && (
                       <motion.span
                         layoutId="nav-underline"
-                        className="absolute inset-x-1 -bottom-0.5 h-0.5 rounded-full bg-gradient-to-r from-brand-blue to-brand-blue-light"
+                        className="absolute inset-x-1 -bottom-0.5 h-0.5 bg-accent-gold"
                         transition={{ type: 'spring', stiffness: 480, damping: 34 }}
                       />
                     )}
@@ -158,7 +158,7 @@ const Navbar: React.FC = () => {
 
       <div className="h-0.5 w-full bg-slate-200/50 dark:bg-slate-800/50">
         <div
-          className="h-full bg-gradient-to-r from-brand-blue to-brand-blue-light transition-[width] duration-200 ease-out"
+          className="h-full bg-accent-gold transition-[width] duration-200 ease-out"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>

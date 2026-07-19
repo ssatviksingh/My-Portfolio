@@ -37,7 +37,8 @@ function HeroMesh({ quality }: { quality: Quality }) {
     mesh.rotation.y = THREE.MathUtils.lerp(mesh.rotation.y, targetY, 0.04);
   });
 
-  const color = theme === 'dark' ? '#3b82f6' : '#074782';
+  const color = theme === 'dark' ? '#d4a017' : '#0a0a0b';
+  const accent = '#d4a017';
 
   return (
     <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.55}>
@@ -49,16 +50,16 @@ function HeroMesh({ quality }: { quality: Quality }) {
           speed={1.6}
           roughness={0.22}
           metalness={0.55}
-          emissive={color}
-          emissiveIntensity={theme === 'dark' ? 0.28 : 0.12}
+          emissive={accent}
+          emissiveIntensity={theme === 'dark' ? 0.32 : 0.14}
         />
       </mesh>
       <mesh position={[1.9, 0.6, -0.4]} scale={0.16}>
         <sphereGeometry args={[1, quality === 'high' ? 24 : 12, quality === 'high' ? 24 : 12]} />
         <meshStandardMaterial
-          color={theme === 'dark' ? '#93c5fd' : '#38bdf8'}
-          emissive={theme === 'dark' ? '#60a5fa' : '#0ea5e9'}
-          emissiveIntensity={0.5}
+          color={accent}
+          emissive={accent}
+          emissiveIntensity={0.45}
           roughness={0.35}
         />
       </mesh>
@@ -67,7 +68,7 @@ function HeroMesh({ quality }: { quality: Quality }) {
 }
 
 export const HeroScene: React.FC = () => {
-  const [dpr, setDpr] = useState<[number, number]>([1, 1.5]);
+  const [dpr, setDpr] = useState<[number, number]>([1, 2]);
   const [quality, setQuality] = useState<Quality>('high');
   const { theme } = useTheme();
 
@@ -96,7 +97,7 @@ export const HeroScene: React.FC = () => {
         }}
         onIncline={() => {
           setQuality('high');
-          setDpr([1, 1.5]);
+          setDpr([1, 2]);
         }}
       />
     </Canvas>

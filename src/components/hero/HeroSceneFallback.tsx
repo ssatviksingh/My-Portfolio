@@ -7,9 +7,9 @@ export const HeroSceneFallback: React.FC = () => {
       className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
       aria-hidden
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/40 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
+      <div className="absolute inset-0 bg-gradient-to-br from-paper via-paper-soft to-paper dark:from-ink dark:via-ink-soft dark:to-ink" />
       <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full blur-3xl animate-pulse bg-[color:var(--hero-glow)]" />
-      <div className="absolute right-[12%] top-[28%] h-40 w-40 rounded-full bg-brand-blue-light/25 blur-2xl dark:bg-sky-400/15" />
+      <div className="absolute right-[12%] top-[28%] h-40 w-40 rounded-full bg-accent-gold/20 blur-2xl" />
       <svg
         className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 opacity-40 dark:opacity-30"
         viewBox="0 0 200 200"
@@ -17,7 +17,7 @@ export const HeroSceneFallback: React.FC = () => {
       >
         <polygon
           points="100,10 180,60 180,140 100,190 20,140 20,60"
-          className="stroke-brand-blue/50 dark:stroke-brand-blue-light/40"
+          className="stroke-ink/40 dark:stroke-accent-gold/40"
           strokeWidth="1.2"
           fill="url(#heroPoly)"
         >
@@ -32,8 +32,8 @@ export const HeroSceneFallback: React.FC = () => {
         </polygon>
         <defs>
           <linearGradient id="heroPoly" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#074782" stopOpacity="0.15" />
-            <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.25" />
+            <stop offset="0%" stopColor="#0a0a0b" stopOpacity="0.12" />
+            <stop offset="100%" stopColor="#d4a017" stopOpacity="0.28" />
           </linearGradient>
         </defs>
       </svg>

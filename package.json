@@ -5,12 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "postinstall": "npx puppeteer browsers install chrome",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "deploy:vercel": "npm run build && vercel deploy ./dist --prod"
+    "deploy": "npm run deploy:vercel",
+    "deploy:vercel": "npm run build && vercel deploy ./dist --prod",
+    "deploy:gh-pages": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

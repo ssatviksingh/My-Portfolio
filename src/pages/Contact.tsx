@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import AnimatedSection from '../components/common/AnimatedSection';
 import SectionHeading from '../components/common/SectionHeading';
 import MouseParallaxWrapper from '../components/common/MouseParallaxWrapper';
+import { usePrerenderReady } from '../hooks/usePrerenderReady';
 
 type FormState = {
   name: string;
@@ -13,6 +14,7 @@ type FormState = {
 type Status = 'idle' | 'loading';
 
 const Contact: React.FC = () => {
+  usePrerenderReady();
   const [form, setForm] = useState<FormState>({
     name: '',
     email: '',

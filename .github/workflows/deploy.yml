@@ -1,0 +1,57 @@
+name: Deploy to Vercel
+
+# CRITICAL: Puppeteer cannot run on Vercel CI.
+# Do NOT rely on Vercel git-integration builds — they skip prerender and ship
+# an empty SPA shell. This workflow builds with Puppeteer locally-in-CI and
+# deploys the resulting dist/ via the Vercel CLI.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chrome for Puppeteer
+        run: npx puppeteer browsers install chrome
+
+      - name: Build with Puppeteer prerender
+        run: npm run build
+        env:
+          PRERENDER_WAIT: element
+          # Ensure Chromium can run in CI
+          PUPPETEER_SKIP_DOWNLOAD: 'false'
+
+      - name: Verify prerendered project content
+        run: |
+          set -e
+          for f in dist/index.html dist/portfolio/index.html; do
+            echo "Checking $f"
+            grep -q 'WayGood' "$f"
+            grep -q 'data-prerender-ready="true"' "$f"
+          done
+          grep -q 'Disaster' dist/portfolio/index.html
+          grep -q 'Virtual Event' dist/portfolio/index.html
+          echo "Prerender content check passed."
+
+      - name: Deploy dist/ to Vercel (production)
+        run: npx vercel deploy ./dist --prod --yes --token="${{ secrets.VERCEL_TOKEN }}"
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

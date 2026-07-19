@@ -76,12 +76,13 @@ export const projects: Project[] = [
     platform: 'Android & iOS · React Native',
     role: 'Full-stack mobile developer (React Native frontend + Node/Express/Mongo backend).',
     problem:
-      'During disasters, connectivity fails. Users still need a reliable way to send SOS messages, share location, and receive alerts.',
+      'During disasters, connectivity fails. Users still need a reliable way to send SOS messages, share location, and receive alerts — without depending on a perfect network.',
     features: [
       'Offline-first SOS composer with retry queue when network returns',
       'Live location sharing and attachment support for emergency context',
       'Real-time disaster alert surfaces tuned for stressful scenarios',
       'Accessibility-minded UI for high-stress, one-handed use',
+      'Backend APIs for alerts and SOS intake (Node/Express/MongoDB)',
     ],
     metrics: ['15+ screens', 'Offline SOS queue', 'Shipped in 14 days'],
     tech: [
@@ -95,8 +96,8 @@ export const projects: Project[] = [
       'Express',
       'MongoDB',
     ],
-    images: [disasterAlertImg],
-    featured: true,
+    images: [disasterAlertImg, disasterAlertImg, disasterAlertImg],
+    featured: false,
     repo: 'https://github.com/ssatviksingh/disaster-alert-sos',
   },
   {
@@ -114,11 +115,12 @@ export const projects: Project[] = [
       'RSVP and favorites flows with clear empty/loading states',
       'Notification-ready structure for schedule and status updates',
       'Motion-aware UI patterns for a product-quality feel',
+      'REST-backed event lists designed for refresh and cache',
     ],
     metrics: ['RSVP + favorites flows', 'Real-time-ready data model', 'Mobile-first event UX'],
     tech: ['React Native', 'TypeScript', 'Expo', 'Node.js', 'MongoDB', 'REST API'],
-    images: [virtualEventImg],
-    featured: true,
+    images: [virtualEventImg, virtualEventImg, virtualEventImg],
+    featured: false,
     repo: 'https://github.com/ssatviksingh/virtual-event-platform',
   },
   {
@@ -140,7 +142,7 @@ export const projects: Project[] = [
     metrics: ['Local-first data', 'Custom budget charts', 'Production-ready repo'],
     tech: ['React Native', 'TypeScript', 'AsyncStorage', 'React Navigation', 'Zustand'],
     images: [],
-    featured: true,
+    featured: false,
     repo: 'https://github.com/ssatviksingh/personal-finance-companion',
   },
   {
