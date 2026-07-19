@@ -5,9 +5,10 @@ import SectionHeading from '../components/common/SectionHeading';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link } from 'react-router-dom';
-import { projects } from '../data/projects';
+import { getFeaturedProjects } from '../data/projects';
 import { blogPosts } from '../data/blogPosts';
 import { MagneticButton } from '../components/common/MagneticButton';
+import ProjectCard from '../components/projects/ProjectCard';
 import wayGoodScreen from '../assets/WayGoodHelpStudyAbroad1.png';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -340,54 +341,9 @@ const Home: React.FC = () => {
               subtitle="Selected React Native apps engineered for production."
             />
             
-            <div className="mt-8 grid gap-8 md:grid-cols-3">
-              {projects.map(project => (
-                <article
-                  key={project.id}
-                  className="group flex flex-col rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-brand-blue/60 dark:hover:border-brand-blue-light/60"
-                  data-cursor="card"
-                  data-cursor-label="VIEW"
-                >
-                  <div className="flex items-center justify-between text-xs text-text-light-muted dark:text-text-dark-muted mb-2">
-                    <span>{project.year}</span>
-                    <span className="font-semibold px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800">
-                      {project.platform.split('·')[0].trim()}
-                    </span>
-                  </div>
-
-                  <h3 className="font-display text-lg font-bold text-text-light-main dark:text-text-dark-main mb-1.5 group-hover:text-brand-blue dark:group-hover:text-brand-blue-light transition-colors">
-                    {project.title}
-                  </h3>
-
-                  <p className="text-xs text-text-light-muted dark:text-text-dark-muted line-clamp-3 mb-4 leading-relaxed">
-                    {project.description}
-                  </p>
-
-                  <div className="text-[11px] font-semibold text-brand-blue dark:text-brand-blue-light mb-4 border-l-2 border-brand-blue/30 pl-2">
-                    {project.outcome}
-                  </div>
-
-                  <div className="mt-auto pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
-                    <Link
-                      to={`/portfolio/${project.slug}`}
-                      className="text-xs font-bold text-brand-blue dark:text-brand-blue-light hover:underline"
-                      data-cursor="button"
-                    >
-                      Case Study →
-                    </Link>
-                    
-                    {project.repo && (
-                      <a
-                        href={project.repo}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs font-medium text-text-light-muted dark:text-text-dark-muted hover:text-brand-blue dark:hover:text-brand-blue-light"
-                      >
-                        GitHub ↗
-                      </a>
-                    )}
-                  </div>
-                </article>
+            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {getFeaturedProjects().map((project) => (
+                <ProjectCard key={project.id} project={project} variant="compact" />
               ))}
             </div>
 

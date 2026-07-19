@@ -1,15 +1,18 @@
-// src/pages/ProjectDetail.tsx
 import React, { useEffect, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { projects } from '../data/projects';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { gsap } from 'gsap';
+import {
+  getProjectBySlug,
+  getProjectCover,
+  getProjectTech,
+} from '../data/projects';
+import ProjectPhoneFrame from '../components/projects/ProjectPhoneFrame';
 
 const ProjectDetail: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement | null>(null);
-
-  const project = projects.find(p => p.slug === slug);
+  const project = slug ? getProjectBySlug(slug) : undefined;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -23,7 +26,7 @@ const ProjectDetail: React.FC = () => {
       gsap.fromTo(
         el,
         { autoAlpha: 0, y: 15 },
-        { autoAlpha: 1, y: 0, duration: 0.5, ease: 'power3.out' },
+        { autoAlpha: 1, y: 0, duration: 0.45, ease: 'power3.out' },
       );
     }, el);
 
@@ -32,14 +35,14 @@ const ProjectDetail: React.FC = () => {
 
   if (!project) {
     return (
-      <main className="px-6 pt-24 pb-20 bg-bg-light dark:bg-bg-dark text-text-light-main dark:text-text-dark-main transition-colors duration-300">
-        <div className="mx-auto max-w-4xl text-center space-y-4">
+      <main className="bg-bg-light px-6 pb-20 pt-24 text-text-light-main transition-colors duration-300 dark:bg-bg-dark dark:text-text-dark-main">
+        <div className="mx-auto max-w-4xl space-y-4 text-center">
           <p className="text-sm text-text-light-muted dark:text-text-dark-muted">
             This project could not be found. It may have been moved or renamed.
           </p>
           <button
             onClick={() => navigate('/portfolio')}
-            className="text-sm font-semibold text-brand-blue dark:text-brand-blue-light hover:underline"
+            className="text-sm font-semibold text-brand-blue hover:underline dark:text-brand-blue-light"
             data-cursor="button"
           >
             ← Back to portfolio
@@ -49,124 +52,131 @@ const ProjectDetail: React.FC = () => {
     );
   }
 
+  const cover = getProjectCover(project);
+  const tech = getProjectTech(project);
+  const gallery = project.images.length > 0 ? project.images : cover ? [cover] : [];
+
   return (
-    <main className="px-6 pt-24 pb-20 bg-bg-light dark:bg-bg-dark text-text-light-main dark:text-text-dark-main transition-colors duration-300">
+    <main className="bg-bg-light px-6 pb-20 pt-24 text-text-light-main transition-colors duration-300 dark:bg-bg-dark dark:text-text-dark-main">
       <div ref={containerRef} className="mx-auto max-w-6xl">
-        <div className="mb-6 flex items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
+        <div className="mb-6 flex items-center justify-between gap-4 border-b border-slate-200 pb-4 dark:border-slate-800">
           <Link
             to="/portfolio"
-            className="text-xs font-bold text-brand-blue dark:text-brand-blue-light hover:underline"
+            className="text-xs font-bold text-brand-blue hover:underline dark:text-brand-blue-light"
             data-cursor="button"
           >
             ← Back to all apps
           </Link>
-          <span className="text-xs text-text-light-muted dark:text-text-dark-muted font-medium">
+          <span className="text-xs font-medium text-text-light-muted dark:text-text-dark-muted">
             {project.year} · {project.platform}
           </span>
         </div>
 
         <section className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          {/* LEFT – narrative */}
           <div className="space-y-6">
-            <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-6 shadow-sm">
-              <p className="text-xs font-bold uppercase tracking-wider text-brand-blue dark:text-brand-blue-light mb-2">
-                Project Case Study
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+              <p className="mb-2 text-xs font-bold uppercase tracking-wider text-brand-blue dark:text-brand-blue-light">
+                Project case study
               </p>
-              <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-tight mb-4 leading-tight">
+              <h1 className="mb-3 font-display text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
                 {project.title}
               </h1>
-              <p className="text-sm text-text-light-muted dark:text-text-dark-muted leading-relaxed whitespace-pre-line">
-                {project.description}
+              <p className="text-sm font-medium text-text-light-main dark:text-text-dark-main">
+                {project.tagline}
+              </p>
+              <p className="mt-4 text-sm leading-relaxed text-text-light-muted dark:text-text-dark-muted">
+                {project.problem}
               </p>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-6 shadow-sm">
-              <h2 className="font-display text-base font-bold mb-3 pl-2 border-l-2 border-brand-blue dark:border-brand-blue-light">
-                Role & Focus
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+              <h2 className="mb-3 border-l-2 border-brand-blue pl-2 font-display text-base font-bold dark:border-brand-blue-light">
+                My role
               </h2>
-              <p className="text-sm text-text-light-muted dark:text-text-dark-muted leading-relaxed">
+              <p className="text-sm leading-relaxed text-text-light-muted dark:text-text-dark-muted">
                 {project.role}
               </p>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-6 shadow-sm">
-              <h2 className="font-display text-base font-bold mb-3 pl-2 border-l-2 border-brand-blue dark:border-brand-blue-light">
-                Outcomes & Highlights
+            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+              <h2 className="mb-3 border-l-2 border-brand-blue pl-2 font-display text-base font-bold dark:border-brand-blue-light">
+                Key features
               </h2>
-              <ul className="text-sm text-text-light-muted dark:text-text-dark-muted space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
-                  <span><strong>Metric Outcome:</strong> {project.outcome}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
-                  <span>Pixel-accurate layout mapping matching exact Figma margins.</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
-                  <span>Tested across physical testing devices for responsiveness.</span>
-                </li>
+              <ul className="space-y-2 text-sm text-text-light-muted dark:text-text-dark-muted">
+                {project.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2">
+                    <span className="text-brand-blue dark:text-brand-blue-light">✔</span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
               </ul>
             </div>
+
+            {project.metrics && project.metrics.length > 0 && (
+              <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+                <h2 className="mb-3 border-l-2 border-brand-blue pl-2 font-display text-base font-bold dark:border-brand-blue-light">
+                  Outcomes
+                </h2>
+                <div className="flex flex-wrap gap-2">
+                  {project.metrics.map((metric) => (
+                    <span
+                      key={metric}
+                      className="rounded-full bg-brand-blue/10 px-3 py-1.5 text-xs font-semibold text-brand-blue dark:bg-brand-blue-light/10 dark:text-brand-blue-light"
+                    >
+                      {metric}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* RIGHT – visual gallery + tech */}
           <aside className="space-y-6">
-            {/* Gallery View */}
-            {project.images && project.images.length > 1 ? (
-              <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-5 shadow-sm space-y-4">
-                <h3 className="font-display text-sm font-bold text-text-light-main dark:text-text-dark-main">
-                  App Screenshot Gallery
-                </h3>
-                <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-thin snap-x">
-                  {project.images.map((img, index) => (
+            {gallery.length > 1 ? (
+              <div className="space-y-4 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/40">
+                <h3 className="font-display text-sm font-bold">App screenshots</h3>
+                <div className="flex snap-x gap-4 overflow-x-auto pb-2">
+                  {gallery.map((img, index) => (
                     <div
-                      key={index}
-                      className="flex-shrink-0 snap-center rounded-[1.6rem] border-4 border-slate-350 dark:border-slate-800 bg-slate-200 dark:bg-slate-950 p-1.5 w-[160px] aspect-[9/16] overflow-hidden"
+                      key={`${project.id}-${index}`}
+                      className="aspect-[9/16] w-[160px] flex-shrink-0 snap-center overflow-hidden rounded-[1.6rem] border-4 border-slate-300 bg-slate-200 p-1.5 dark:border-slate-800 dark:bg-slate-950"
                     >
                       <img
                         src={img}
                         alt={`${project.title} screen ${index + 1}`}
-                        className="w-full h-full object-cover rounded-[1.1rem]"
+                        className="h-full w-full rounded-[1.1rem] object-cover"
+                        loading="lazy"
                       />
                     </div>
                   ))}
                 </div>
               </div>
             ) : (
-              project.image && (
-                <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 p-5 shadow-sm flex justify-center">
-                  <div className="relative w-full max-w-[200px] rounded-[1.8rem] border-4 border-slate-300 dark:border-slate-800 p-1.5 bg-slate-200 dark:bg-slate-950 overflow-hidden aspect-[9/16]">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover rounded-[1.2rem]"
-                      loading="lazy"
-                    />
-                  </div>
-                </div>
-              )
+              <div className="flex justify-center rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/40">
+                <ProjectPhoneFrame image={cover} title={project.title} slug={project.slug} />
+              </div>
             )}
 
-            <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-5 text-xs text-text-light-muted dark:text-text-dark-muted shadow-sm">
-              <h2 className="mb-3 font-display text-sm font-bold text-text-light-main dark:text-text-dark-main">Tech Stack</h2>
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                {project.tools.map(tool => (
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 text-xs shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+              <h2 className="mb-3 font-display text-sm font-bold text-text-light-main dark:text-text-dark-main">
+                Tech stack
+              </h2>
+              <div className="mb-3 flex flex-wrap gap-1.5">
+                {tech.map((item) => (
                   <span
-                    key={tool}
-                    className="rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200/50 dark:border-slate-800/40 px-2.5 py-1 font-medium text-text-light-muted dark:text-text-dark-muted"
+                    key={item}
+                    className="rounded-lg border border-slate-200/50 bg-slate-100 px-2.5 py-1 font-medium text-text-light-muted dark:border-slate-800/40 dark:bg-slate-800 dark:text-text-dark-muted"
                   >
-                    {tool}
+                    {item}
                   </span>
                 ))}
               </div>
-              <p className="text-[11px] leading-relaxed text-text-light-muted/80 dark:text-text-dark-muted/80 border-t border-slate-100 dark:border-slate-850 pt-2.5">
-                Engineered for maximum typing safety, layout responsiveness, and seamless asynchronous state updates.
-              </p>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-5 text-xs text-text-light-muted dark:text-text-dark-muted shadow-sm">
-              <h2 className="mb-3 font-display text-sm font-bold text-text-light-main dark:text-text-dark-main">Project Deliverables</h2>
+            <div className="rounded-3xl border border-slate-200 bg-white p-5 text-xs shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+              <h2 className="mb-3 font-display text-sm font-bold text-text-light-main dark:text-text-dark-main">
+                Links
+              </h2>
               <ul className="space-y-2 font-medium">
                 {project.repo ? (
                   <li>
@@ -174,13 +184,13 @@ const ProjectDetail: React.FC = () => {
                       href={project.repo}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-brand-blue dark:text-brand-blue-light hover:underline flex items-center gap-1"
+                      className="flex items-center gap-1 text-brand-blue hover:underline dark:text-brand-blue-light"
                     >
-                      View GitHub Repository ↗
+                      View GitHub repository ↗
                     </a>
                   </li>
                 ) : (
-                  <li className="text-text-light-muted/60 dark:text-text-dark-muted/60 italic">
+                  <li className="italic text-text-light-muted/60 dark:text-text-dark-muted/60">
                     Source code is private under NDA
                   </li>
                 )}
@@ -190,9 +200,9 @@ const ProjectDetail: React.FC = () => {
                       href={project.liveUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-brand-blue dark:text-brand-blue-light hover:underline flex items-center gap-1"
+                      className="flex items-center gap-1 text-brand-blue hover:underline dark:text-brand-blue-light"
                     >
-                      Search on Google Play Store ↗
+                      Live demo / store ↗
                     </a>
                   </li>
                 )}

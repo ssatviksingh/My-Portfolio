@@ -84,6 +84,13 @@ export const projectRouteMeta: RouteMeta[] = [
     keywords: 'React Native, SOS, offline-first, case study',
   },
   {
+    path: '/portfolio/virtual-event-platform',
+    title: 'Virtual Event Platform',
+    description:
+      'Mobile-first event app for discovery, RSVPs, favorites, and real-time-ready updates built with React Native.',
+    keywords: 'React Native, events, RSVP, case study',
+  },
+  {
     path: '/portfolio/personal-finance-companion',
     title: 'Personal Finance Companion',
     description:
