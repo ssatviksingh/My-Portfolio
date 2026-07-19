@@ -1,17 +1,14 @@
-// src/pages/Skills.tsx
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SectionHeading from "../components/common/SectionHeading";
-import { skills } from "../data/skills";
-
-gsap.registerPlugin(ScrollTrigger);
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
+import { gsap } from 'gsap';
+import SectionHeading from '../components/common/SectionHeading';
+import { skills } from '../data/skills';
+import { Stagger } from '../components/motion/Reveal';
+import { fadeUp } from '../components/motion/variants';
 
 const Skills: React.FC = () => {
   const motionRef = useRef<HTMLDivElement | null>(null);
-  const sectionRef = useRef<HTMLDivElement | null>(null);
 
-  // Cursor-based motion
   useEffect(() => {
     const el = motionRef.current;
     if (!el) return;
@@ -23,109 +20,96 @@ const Skills: React.FC = () => {
       gsap.to(el, {
         x,
         y,
-        duration: 0.6,
-        ease: "power2.out",
+        duration: 0.45,
+        ease: 'power2.out',
       });
     };
 
-    window.addEventListener("mousemove", handleMove);
-    return () => window.removeEventListener("mousemove", handleMove);
-  }, []);
-
-  // Scroll reveal
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    const blocks = sectionRef.current.querySelectorAll(".skill-block");
-
-    gsap.fromTo(
-      blocks,
-      { y: 30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        stagger: 0.08,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 90%",
-        },
-      }
-    );
+    window.addEventListener('mousemove', handleMove);
+    return () => window.removeEventListener('mousemove', handleMove);
   }, []);
 
   return (
-    <main className="relative px-6 pt-24 pb-20 overflow-hidden bg-bg-light dark:bg-bg-dark text-text-light-main dark:text-text-dark-main transition-colors duration-300">
-      {/* Background glow blobs */}
-      <div className="pointer-events-none absolute -left-40 top-10 h-72 w-72 rounded-full bg-brand-blue/10 dark:bg-brand-blue/20 blur-3xl" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-72 w-72 rounded-full bg-brand-blue-light/10 dark:bg-brand-blue-light/15 blur-3xl" />
+    <main className="relative overflow-hidden bg-bg-light px-6 pb-20 pt-24 text-text-light-main transition-colors duration-300 dark:bg-bg-dark dark:text-text-dark-main">
+      <div className="pointer-events-none absolute -left-40 top-10 h-72 w-72 rounded-full bg-brand-blue/10 blur-3xl dark:bg-brand-blue/20" />
+      <div className="pointer-events-none absolute -right-40 bottom-0 h-72 w-72 rounded-full bg-brand-blue-light/10 blur-3xl dark:bg-brand-blue-light/15" />
 
       <div ref={motionRef}>
-        <div ref={sectionRef} className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-5xl">
           <SectionHeading
             eyebrow="Expertise"
             title="Technical Skills & Competence"
             subtitle="Categorized list of frameworks, methodologies, and toolsets I use to build mobile apps."
           />
 
-          {/* Grouped Skills Grid */}
-          <div className="grid gap-6 sm:grid-cols-2 mt-8">
+          <Stagger className="mt-8 grid gap-6 sm:grid-cols-2">
             {skills.map((group) => (
-              <div
+              <motion.div
                 key={group.category}
-                className="skill-block rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/50 p-6 shadow-sm hover:shadow-md transition-all duration-300 hover:border-brand-blue/50 dark:hover:border-brand-blue-light/50"
+                variants={fadeUp}
+                whileHover={{ y: -4, transition: { duration: 0.25, ease: 'easeOut' } }}
+                className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-colors hover:border-brand-blue/50 dark:border-slate-800 dark:bg-slate-900/50 dark:hover:border-brand-blue-light/50"
                 data-cursor="card"
                 data-cursor-label="STACK"
               >
-                <h3 className="font-display text-base font-bold text-text-light-main dark:text-text-dark-main mb-4 border-l-2 border-brand-blue dark:border-brand-blue-light pl-2">
+                <h3 className="mb-4 border-l-2 border-brand-blue pl-2 font-display text-base font-bold text-text-light-main dark:border-brand-blue-light dark:text-text-dark-main">
                   {group.category}
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {group.items.map((item) => (
-                    <span
+                  {group.items.map((item, index) => (
+                    <motion.span
                       key={item}
-                      className="rounded-xl bg-slate-100 dark:bg-slate-900 px-3 py-1.5 text-xs font-semibold text-text-light-muted dark:text-text-dark-muted border border-slate-200/50 dark:border-slate-800/50 transition-colors hover:text-brand-blue dark:hover:text-brand-blue-light hover:border-brand-blue/20 dark:hover:border-brand-blue-light/20"
+                      initial={{ opacity: 0, scale: 0.94 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.28, delay: Math.min(index * 0.03, 0.3), ease: 'easeOut' }}
+                      whileHover={{ scale: 1.04 }}
+                      className="rounded-xl border border-slate-200/50 bg-slate-100 px-3 py-1.5 text-xs font-semibold text-text-light-muted transition-colors hover:border-brand-blue/20 hover:text-brand-blue dark:border-slate-800/50 dark:bg-slate-900 dark:text-text-dark-muted dark:hover:border-brand-blue-light/20 dark:hover:text-brand-blue-light"
                     >
                       {item}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </Stagger>
 
-          {/* Core Philosophy Section */}
-          <div className="mt-12 skill-block">
-            <h2 className="font-display text-lg font-bold text-text-light-main dark:text-text-dark-main mb-4">
+          <motion.div
+            className="mt-12"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
+          >
+            <h2 className="mb-4 font-display text-lg font-bold text-text-light-main dark:text-text-dark-main">
               My Engineering Philosophy
             </h2>
-            <div className="grid gap-6 md:grid-cols-3 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/30 p-6 shadow-sm">
+            <div className="grid gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:grid-cols-3 dark:border-slate-800 dark:bg-slate-900/30">
               {[
                 {
-                  title: "Figma-to-Code Accuracy",
-                  desc: "Designing and scaling layout components to match high-fidelity screen designs without compromise across varied aspect ratios."
+                  title: 'Figma-to-Code Accuracy',
+                  desc: 'Designing and scaling layout components to match high-fidelity screen designs without compromise across varied aspect ratios.',
                 },
                 {
-                  title: "CLI & Performance Optimization",
-                  desc: "Using React Native CLI and native layouts to avoid bundle bloating, ensuring quick boot speeds and smooth re-renders."
+                  title: 'CLI & Performance Optimization',
+                  desc: 'Using React Native CLI and native layouts to avoid bundle bloating, ensuring quick boot speeds and smooth re-renders.',
                 },
                 {
-                  title: "Production Focused",
-                  desc: "Testing directly on physical devices to debug layout bottlenecks, offline-first behaviors, and dark mode transitions."
-                }
+                  title: 'Production Focused',
+                  desc: 'Testing directly on physical devices to debug layout bottlenecks, offline-first behaviors, and dark mode transitions.',
+                },
               ].map((item) => (
                 <div key={item.title} className="space-y-2">
                   <h4 className="text-xs font-bold text-brand-blue dark:text-brand-blue-light">
                     {item.title}
                   </h4>
-                  <p className="text-xs text-text-light-muted dark:text-text-dark-muted leading-relaxed">
+                  <p className="text-xs leading-relaxed text-text-light-muted dark:text-text-dark-muted">
                     {item.desc}
                   </p>
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </main>

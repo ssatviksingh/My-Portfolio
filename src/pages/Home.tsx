@@ -1,25 +1,25 @@
 // src/pages/Home.tsx
 import React, { useEffect, useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import AnimatedSection from '../components/common/AnimatedSection';
 import SectionHeading from '../components/common/SectionHeading';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Link } from 'react-router-dom';
 import { getFeaturedProjects } from '../data/projects';
 import { blogPosts } from '../data/blogPosts';
 import { MagneticButton } from '../components/common/MagneticButton';
 import ProjectCard from '../components/projects/ProjectCard';
+import { Stagger } from '../components/motion/Reveal';
+import { heroContainer, heroItem } from '../components/motion/variants';
 import wayGoodScreen from '../assets/WayGoodHelpStudyAbroad1.png';
-
-gsap.registerPlugin(ScrollTrigger);
 
 const Home: React.FC = () => {
   const motionRef = useRef<HTMLDivElement | null>(null);
-  const heroRef = useRef<HTMLDivElement | null>(null);
   const floatingRef = useRef<HTMLDivElement | null>(null);
-  const aboutRef = useRef<HTMLDivElement | null>(null);
+  const reduceMotion = useReducedMotion();
 
   const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (reduceMotion) return;
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -32,7 +32,7 @@ const Home: React.FC = () => {
       rotateY,
       transformPerspective: 800,
       transformOrigin: 'center',
-      duration: 0.4,
+      duration: 0.35,
       ease: 'power2.out',
     });
   };
@@ -41,32 +41,16 @@ const Home: React.FC = () => {
     gsap.to(e.currentTarget, {
       rotateX: 0,
       rotateY: 0,
-      duration: 0.5,
+      duration: 0.4,
       ease: 'power3.out',
     });
   };
 
-  // HERO animations (stagger + floating)
   useEffect(() => {
-    const heroEl = heroRef.current;
     const floatingEl = floatingRef.current;
-    if (!heroEl || !floatingEl) return;
+    if (!floatingEl || reduceMotion) return;
 
     const ctx = gsap.context(() => {
-      // Stagger hero headline + text
-      gsap.fromTo(
-        heroEl.querySelectorAll('.hero-line'),
-        { y: 30, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.9,
-          ease: 'power3.out',
-          stagger: 0.1,
-        },
-      );
-
-      // Gentle floating motion for the stack card
       gsap.to(floatingEl, {
         y: -8,
         duration: 3,
@@ -77,37 +61,11 @@ const Home: React.FC = () => {
     });
 
     return () => ctx.revert();
-  }, []);
+  }, [reduceMotion]);
 
-  // ABOUT section scroll-in animation
-  useEffect(() => {
-    const aboutEl = aboutRef.current;
-    if (!aboutEl) return;
-
-    const ctx = gsap.context(() => {
-      const targets = aboutEl.querySelectorAll('.about-animate');
-      if (!targets.length) return;
-
-      gsap.from(targets, {
-        opacity: 0,
-        y: 30,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: aboutEl,
-          start: 'top 85%',
-        },
-      });
-    }, aboutRef);
-
-    return () => ctx.revert();
-  }, []);
-
-  // Shared parallax for hero
   useEffect(() => {
     const el = motionRef.current;
-    if (!el) return;
+    if (!el || reduceMotion) return;
 
     const handleMove = (e: MouseEvent) => {
       const x = (e.clientX - window.innerWidth / 2) / 50;
@@ -116,17 +74,16 @@ const Home: React.FC = () => {
       gsap.to(el, {
         x,
         y,
-        duration: 0.8,
+        duration: 0.45,
         ease: 'power2.out',
       });
     };
 
     window.addEventListener('mousemove', handleMove);
     return () => window.removeEventListener('mousemove', handleMove);
-  }, []);
+  }, [reduceMotion]);
 
-  const handleScrollToProjects = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleScrollToProjects = () => {
     const projectsSec = document.getElementById('projects');
     if (projectsSec) {
       const offset = 72;
@@ -148,53 +105,72 @@ const Home: React.FC = () => {
       <div ref={motionRef} className="relative z-10">
         {/* HERO SECTION */}
         <section id="hero" className="relative flex min-h-[85vh] items-center px-6 pt-12 pb-16 sm:px-10 lg:px-20">
-          <div
-            ref={heroRef}
-            className="mx-auto flex w-full max-w-6xl flex-col gap-12 lg:flex-row lg:items-center"
-          >
-            {/* LEFT SIDE – TEXT */}
-            <div className="flex-[1.2] space-y-6">
-              <p className="hero-line inline-flex rounded-full border border-brand-blue/30 dark:border-brand-blue/40 bg-brand-blue/5 dark:bg-brand-blue/10 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-brand-blue dark:text-brand-blue-light">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 lg:flex-row lg:items-center">
+            <motion.div
+              className="flex-[1.2] space-y-6"
+              variants={heroContainer}
+              initial={reduceMotion ? false : 'hidden'}
+              animate="show"
+            >
+              <motion.p
+                variants={heroItem}
+                className="inline-flex rounded-full border border-brand-blue/30 bg-brand-blue/5 px-4 py-1 text-xs font-semibold uppercase tracking-wider text-brand-blue dark:border-brand-blue/40 dark:bg-brand-blue/10 dark:text-brand-blue-light"
+              >
                 React Native & Mobile Developer
-              </p>
+              </motion.p>
 
-              <h1 className="hero-line font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+              <motion.h1
+                variants={heroItem}
+                className="font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
+              >
                 React Native Developer —{' '}
                 <span className="bg-gradient-to-r from-brand-blue to-brand-blue-light bg-clip-text text-transparent dark:from-brand-blue-light dark:to-accent-gold">
                   Figma to production-ready
                 </span>{' '}
                 mobile apps.
-              </h1>
+              </motion.h1>
 
-              <p className="hero-line max-w-xl text-sm sm:text-base text-text-light-muted dark:text-text-dark-muted leading-relaxed">
+              <motion.p
+                variants={heroItem}
+                className="max-w-xl text-sm leading-relaxed text-text-light-muted sm:text-base dark:text-text-dark-muted"
+              >
                 I build pixel-accurate, high-performance mobile user interfaces for EdTech and SaaS startups. Specializing in Figma-to-code implementations, custom component systems, and live API integrations.
-              </p>
+              </motion.p>
 
-              <div className="hero-line flex flex-wrap gap-4">
+              <motion.div variants={heroItem} className="flex flex-wrap gap-4">
                 <MagneticButton
-                  asChild
-                  className="rounded-2xl bg-brand-blue hover:bg-brand-blue-light dark:bg-brand-blue-light dark:hover:bg-brand-blue text-white px-7 py-3.5 text-sm font-semibold shadow-md transition-colors"
+                  className="rounded-2xl bg-brand-blue px-7 py-3.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-brand-blue-light dark:bg-brand-blue-light dark:hover:bg-brand-blue"
                   data-cursor-label="WORK"
+                  onClick={handleScrollToProjects}
                 >
-                  <a href="#projects" onClick={handleScrollToProjects}>View My Work</a>
+                  View My Work
                 </MagneticButton>
                 <MagneticButton
-                  asChild
-                  className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-900/50 px-7 py-3.5 text-sm font-semibold text-text-light-main dark:text-text-dark-main hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="rounded-2xl border border-slate-200 bg-white/50 px-7 py-3.5 text-sm font-semibold text-text-light-main transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-900/50 dark:text-text-dark-main dark:hover:bg-slate-800"
                   data-cursor-label="UPWORK"
+                  onClick={() =>
+                    window.open(
+                      'https://www.upwork.com/freelancers/~0152c1a5b9ab135976?mp_source=share',
+                      '_blank',
+                      'noreferrer',
+                    )
+                  }
                 >
-                  <a href="https://www.upwork.com/freelancers/~0152c1a5b9ab135976?mp_source=share" target="_blank" rel="noreferrer">Hire Me on Upwork</a>
+                  Hire Me on Upwork
                 </MagneticButton>
-              </div>
+              </motion.div>
 
-              <div className="hero-line flex flex-wrap items-center gap-3 text-xs text-text-light-muted dark:text-text-dark-muted font-medium">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 dark:bg-slate-900 px-3.5 py-1 border border-slate-200/50 dark:border-slate-800/50">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <motion.div
+                variants={heroItem}
+                className="flex flex-wrap items-center gap-3 text-xs font-medium text-text-light-muted dark:text-text-dark-muted"
+              >
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200/50 bg-slate-100 px-3.5 py-1 dark:border-slate-800/50 dark:bg-slate-900">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500" />
                   Available for freelance projects
                 </span>
                 <span>• React Native CLI · Flutter · TypeScript</span>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* RIGHT SIDE – APP PREVIEW CARD */}
             <div
@@ -239,12 +215,9 @@ const Home: React.FC = () => {
           className="border-t border-slate-200/50 dark:border-slate-800/50"
           variant="slide-right"
         >
-          <div
-            ref={aboutRef}
-            className="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-center px-6"
-          >
+          <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 lg:flex-row lg:items-center">
             {/* LEFT SIDE — ABOUT TEXT */}
-            <div className="flex-[1.2] about-animate">
+            <div className="flex-[1.2]">
               <SectionHeading
                 eyebrow="About Me"
                 title="Specialized Mobile App Developer"
@@ -261,7 +234,7 @@ const Home: React.FC = () => {
             </div>
 
             {/* RIGHT SIDE — KEY HIGHLIGHTS */}
-            <div className="flex-1 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-6 text-sm text-text-light-muted dark:text-text-dark-muted shadow-sm about-animate">
+            <div className="flex-1 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 p-6 text-sm text-text-light-muted dark:text-text-dark-muted shadow-sm">
               <p className="mb-4 text-xs font-bold uppercase tracking-wider text-brand-blue dark:text-brand-blue-light">
                 Professional Competency
               </p>
@@ -341,11 +314,11 @@ const Home: React.FC = () => {
               subtitle="Selected React Native apps engineered for production."
             />
             
-            <div className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <Stagger className="mt-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
               {getFeaturedProjects().map((project) => (
                 <ProjectCard key={project.id} project={project} variant="compact" />
               ))}
-            </div>
+            </Stagger>
 
             <div className="mt-8 text-center">
               <Link

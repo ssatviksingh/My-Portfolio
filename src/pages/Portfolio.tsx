@@ -4,6 +4,7 @@ import SectionHeading from '../components/common/SectionHeading';
 import { projects } from '../data/projects';
 import MouseParallaxWrapper from '../components/common/MouseParallaxWrapper';
 import ProjectCard from '../components/projects/ProjectCard';
+import { Stagger } from '../components/motion/Reveal';
 
 const Portfolio: React.FC = () => {
   return (
@@ -19,11 +20,11 @@ const Portfolio: React.FC = () => {
             subtitle="Case studies across EdTech, emergency tooling, events, and wellness — built with React Native."
           />
 
-          <div className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
+          <Stagger className="mt-10 grid gap-8 sm:grid-cols-2 xl:grid-cols-3">
             {projects.map((project) => (
               <ProjectCard key={project.id} project={project} variant="showcase" />
             ))}
-          </div>
+          </Stagger>
         </div>
       </AnimatedSection>
     </MouseParallaxWrapper>

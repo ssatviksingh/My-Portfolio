@@ -1,20 +1,24 @@
 import React from 'react';
-import { motion, useMotionValue, useTransform, type HTMLMotionProps } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, type HTMLMotionProps } from 'framer-motion';
 
-type MagneticButtonProps = Omit<HTMLMotionProps<'button'>, 'style' | 'onDrag' | 'onDragStart' | 'onDragEnd'> & {
+type MagneticButtonProps = Omit<
+  HTMLMotionProps<'button'>,
+  'style' | 'onDrag' | 'onDragStart' | 'onDragEnd'
+> & {
   asChild?: boolean;
   className?: string;
 };
 
 export const MagneticButton: React.FC<MagneticButtonProps> = ({
   children,
-  asChild = false,
   className = '',
   ...props
 }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotate = useTransform(x, [-20, 20], [-3, 3]);
+  const springX = useSpring(x, { stiffness: 320, damping: 22, mass: 0.4 });
+  const springY = useSpring(y, { stiffness: 320, damping: 22, mass: 0.4 });
+  const rotate = useTransform(springX, [-20, 20], [-3, 3]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -29,28 +33,14 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
     y.set(0);
   };
 
-  if (asChild) {
-    // Used when wrapping a Link rendered as button-like element
-    return (
-      <motion.button
-        {...props}
-        style={{ x, y, rotate }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className={`relative inline-flex items-center justify-center ${className}`}
-        data-cursor="button"
-      >
-        {children}
-      </motion.button>
-    );
-  }
-
   return (
     <motion.button
       {...props}
-      style={{ x, y, rotate }}
+      style={{ x: springX, y: springY, rotate }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
+      whileTap={{ scale: 0.97 }}
+      transition={{ duration: 0.2 }}
       className={`relative inline-flex items-center justify-center ${className}`}
       data-cursor="button"
     >
@@ -58,4 +48,3 @@ export const MagneticButton: React.FC<MagneticButtonProps> = ({
     </motion.button>
   );
 };
-
