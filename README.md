@@ -6,7 +6,7 @@
 ---
 
 ## 🚀 **Live Portfolio**
-🔗 https://ssatviksingh.github.io/My-Portfolio/
+🔗 https://my-portfolio-coral-seven-61.vercel.app/
 
 ---
 
@@ -100,13 +100,14 @@ GitHub: https://github.com/ssatviksingh
 
 ---
 
-🚀 Deploying to GitHub Pages
+🚀 Deploying to Vercel
 
-This project uses HashRouter and the gh-pages package.
-
-To deploy:
+```sh
 npm run build
-npm run deploy
+vercel --prod
+```
+
+Or connect the GitHub repo at https://vercel.com for automatic deploys on every push.
 
 ---
 

@@ -98,11 +98,10 @@ const Contact: React.FC = () => {
                 name="subject"
                 value="New Message from Portfolio"
               />
-              {/* Correct redirect path on GitHub Pages */}
               <input
                 type="hidden"
                 name="redirect"
-                value="https://ssatviksingh.github.io/My-Portfolio/#/thank-you"
+                value={`${window.location.origin}/thank-you`}
               />
               <input
                 type="checkbox"

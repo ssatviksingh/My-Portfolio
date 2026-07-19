@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://ssatviksingh.github.io/My-Portfolio/sitemap.xml
+Sitemap: https://my-portfolio-coral-seven-61.vercel.app/sitemap.xml

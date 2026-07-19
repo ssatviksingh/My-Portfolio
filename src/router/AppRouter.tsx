@@ -23,9 +23,9 @@ export const AppRouter: React.FC = () => {
       <Route path="/blog" element={<BlogList />} />
       <Route path="/blog/:slug" element={<BlogPost />} />
       <Route path="/contact" element={<Contact />} />
-      <Route path="*" element={<NotFound />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/thank-you" element={<ThankYou />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
