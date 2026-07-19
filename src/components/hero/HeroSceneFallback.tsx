@@ -1,0 +1,44 @@
+import React from 'react';
+
+/** Lightweight non-WebGL hero backdrop for mobile / low-end / reduced-motion */
+export const HeroSceneFallback: React.FC = () => {
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      aria-hidden
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/40 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950" />
+      <div className="absolute left-1/2 top-1/3 h-64 w-64 -translate-x-1/2 rounded-full bg-brand-blue/20 blur-3xl animate-pulse dark:bg-brand-blue/25" />
+      <div className="absolute right-[12%] top-[28%] h-40 w-40 rounded-full bg-brand-blue-light/25 blur-2xl dark:bg-sky-400/15" />
+      <svg
+        className="absolute left-1/2 top-1/2 h-[320px] w-[320px] -translate-x-1/2 -translate-y-1/2 opacity-40 dark:opacity-30"
+        viewBox="0 0 200 200"
+        fill="none"
+      >
+        <polygon
+          points="100,10 180,60 180,140 100,190 20,140 20,60"
+          className="stroke-brand-blue/50 dark:stroke-brand-blue-light/40"
+          strokeWidth="1.2"
+          fill="url(#heroPoly)"
+        >
+          <animateTransform
+            attributeName="transform"
+            type="rotate"
+            from="0 100 100"
+            to="360 100 100"
+            dur="28s"
+            repeatCount="indefinite"
+          />
+        </polygon>
+        <defs>
+          <linearGradient id="heroPoly" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#074782" stopOpacity="0.15" />
+            <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.25" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  );
+};
+
+export default HeroSceneFallback;

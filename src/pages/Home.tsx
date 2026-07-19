@@ -11,6 +11,7 @@ import { MagneticButton } from '../components/common/MagneticButton';
 import ProjectCard from '../components/projects/ProjectCard';
 import { Stagger } from '../components/motion/Reveal';
 import { heroContainer, heroItem } from '../components/motion/variants';
+import HeroVisual from '../components/hero/HeroVisual';
 import wayGoodScreen from '../assets/WayGoodHelpStudyAbroad1.png';
 
 const Home: React.FC = () => {
@@ -105,6 +106,7 @@ const Home: React.FC = () => {
       <div ref={motionRef} className="relative z-10">
         {/* HERO SECTION */}
         <section id="hero" className="relative flex min-h-[85vh] items-center px-6 pt-12 pb-16 sm:px-10 lg:px-20">
+          <HeroVisual />
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-12 lg:flex-row lg:items-center">
             <motion.div
               className="flex-[1.2] space-y-6"
